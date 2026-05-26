@@ -1,0 +1,474 @@
+{% extends "index/base.html" %}
+{% load static %}
+
+{% block title %}ZEDT - Documentation{%endblock title %}
+
+{% block content %}
+    <!--h1>DOCUMENTATION</h1-->
+
+
+    <div class="row">
+        <div class="bg-body-tertiary border-end col-2 d-flex py-4" style="flex-direction: column;">
+            <a class="link-primary text-decoration-none" href="#setup">Setup</a>
+            <a class="link-primary text-decoration-none ps-4" href="#creating-a-new-project">Creating a new project</a>
+
+
+            <a class="link-primary text-decoration-none" href="#building-a-model">Building a model</a>
+            <a class="link-primary text-decoration-none ps-4" href="#blocks">Blocks</a>
+            <a class="link-primary text-decoration-none ps-4" href="#doors">Doors</a>
+            <a class="link-primary text-decoration-none ps-4" href="#hvac">HVAC</a>
+            <a class="link-primary text-decoration-none ps-4" href="#lights">Lights</a>
+            <a class="link-primary text-decoration-none ps-4" href="#texts">Texts</a>
+            <a class="link-primary text-decoration-none ps-4" href="#windows">Windows</a>
+
+
+            <a class="link-primary text-decoration-none" href="#running-a-simulation">Running a simulation</a>
+
+
+            <a class="link-primary text-decoration-none" href="#analyzing-simulation-results">Analyzing simulation results</a>
+
+
+            <a class="link-primary text-decoration-none" href="#sustainable-contruction-materials">Sustainable Contruction Materials</a>
+        </div>
+
+
+
+
+
+        <div class="col">
+            <div id="setup">
+                <h1 class="text-center">Setup</h1>
+                <p>First, go ahead and create a new account at the signup page.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/signup_page.png' %}" />
+                
+                <p class="mb-0 mt-4">After signing up, go to the login page and login.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/login_page.png' %}" />
+
+
+                <p class="h3 mt-4" id="creating-a-new-project">Creating a new project</p>
+                <p>After you login, you will see your dashboard as shown below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/empty_dashboard.png' %}" />
+
+                <p class="mb-0 mt-4">Go ahead and click on the  "Create+" button. This will show a popup with  fields about the details of your building project. Fill them in and then click "Create".</p>
+                <img class="border text-center" width="70%" src="{% static 'images/project_creation_popup.png' %}" />
+
+                <p class="mb-0 mt-4">After that, you will now see the created project on your dashboard as shown below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/dashboard_with_project.png' %}" />
+            </div>
+            
+
+
+            <div class="mt-4 pt-4" id="building-a-model">
+                <h1 class="text-center">Building A Model</h1>
+                <p>After creating a project, click on the "Open Editor" button. The editor will be displayed as shown below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/blocks.png' %}" />
+
+
+
+                <!-- blocks -->
+                <p class="h3 mt-4" id="blocks">Blocks</p>
+                <p>After opening the editor, you will see in the left panel that there are five blocks and the first one is selected. Blocks are simply the rooms of your building. Move your mouse onto the grid, hold down the left mouse button, drag, and release to create the block. As shown below. Try out the other four blocks as well.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/blocks 2.png' %}" />
+    
+                <p class="mb-0 mt-4">Now you will notice a new button on the right hand side, under the blocks table. This represents your new block. Click on it to open the blocks editor as shown below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/blocks 3.png' %}" />
+
+                <p class="mb-0 mt-4">In the blocks editor are the following fields:</p>
+                <ul>
+                    <li>Type - This is a read only field showing the type of object being edited.</li>
+                    <li>Name - This is the name of this block.</li>
+                    <li>Visible - Turning this on/off will show/hide the block. It doesn't delete it.</li>
+                    <li>Walls</li>
+                    <ul>
+                        <li>East Wall- Turning this on/off will add/remove the wall on the eastern side of the block. It isn't hidden, but completely removed.</li>
+                        <li>West Wall - Turning this on/off will add/remove the wall on the western side of the block. It isn't hidden, but completely removed.</li>
+                        <li>North Wall - Turning this on/off will add/remove the wall on the northern side of the block. It isn't hidden, but completely removed.</li>
+                        <li>South Wall - Turning this on/off will add/remove the wall on the southern side of the block. It isn't hidden, but completely removed.</li>
+                    </ul>
+                    <li>Floor Material - The materials the floor is made of. There are 5 layers in total. It must have atleast one layer.</li>
+                    <ul>
+                        <li>Layer 1 - The top most layer of the floor.</li>
+                        <li>Layer 2 - The layer right below layer 1.</li>
+                        <li>Layer 3 - The layer right below layer 2.</li>
+                        <li>Layer 4 - The layer right below layer 3.</li>
+                        <li>Layer 5 - The bottom most layer of the floor.</li>
+                    </ul>
+                    <li>Exteror Walls Material - The exterior materials of the wall. There are 5 layers in total. It must have atleast one layer.</li>
+                    <ul>
+                        <li>Layer 1 - The outer most layer that comes into contact with the outside environment.</li>
+                        <li>Layer 2 - The layer right below layer 1.</li>
+                        <li>Layer 3 - The layer right below layer 2.</li>
+                        <li>Layer 4 - The layer right below layer 3.</li>
+                        <li>Layer 5 - The layer right below layer 4.</li>
+                    </ul>
+                    <li>Interior Walls Material - The interior materials of the wall. There are 5 layers in total. It must have atleast one layer.</li>
+                    <ul>
+                        <li>Layer 1 - The inner most layer that comes into contact with the inside of the house.</li>
+                        <li>Layer 2 - The layer right below layer 1.</li>
+                        <li>Layer 3 - The layer right below layer 2.</li>
+                        <li>Layer 4 - The layer right below layer 3.</li>
+                        <li>Layer 5 - The layer right below layer 4.</li>
+                    </ul>
+                    <li>Roof Material - The materials the roof is made of. There are 5 layers in total. It must have atleast one layer.</li>
+                    <ul>
+                        <li>Layer 1 - The top most layer of the roof.</li>
+                        <li>Layer 2 - The layer right below layer 1.</li>
+                        <li>Layer 3 - The layer right below layer 2.</li>
+                        <li>Layer 4 - The layer right below layer 3.</li>
+                        <li>Layer 5 - The layer right below layer 4.</li>
+                    </ul>
+                    <li>Delete Block - This button deletes the block from the floor plan.</li>
+                </ul>
+
+
+
+                <!-- doors -->
+                <p class="h3 mt-4 pt-4" id="doors">Doors</p>
+                <p>Back to the left panel, below the blocks are the options for doors. Click on one and add it to the block that was created above. Take not that you can only add doors to walls, not just in mid air.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/doors 2.png' %}" />
+
+                <p class="mb-0 mt-4">Now you will notice a new button on the right hand side, under the doors table. This represents your new door. Click on it to open the doors editor as shown below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/doors 3.png' %}" />
+                
+                <p class="mb-0 mt-4">In the doors editor are the following fields:</p>
+                <ul>
+                    <li>Type - This is a read only field showing the type of object being edited.</li>
+                    <li>Name - This is the name of this door.</li>
+                    <li>Visible - Turning this on/off will show/hide the door. It doesn't delete it.</li>
+                    <li>Material - The material the  door is made of. It must have atleast one material layer.</li>
+                    <ul>
+                        <li>Layer 1 - The first material layer of the door.</li>
+                        <li>Layer 2 - The second material layer of the door.</li>
+                        <li>Layer 3 - The third material layer of the door.</li>
+                        <li>Layer 4 - The fourth material layer of the door.</li>
+                        <li>Layer 5 - The fifth material layer of the door.</li>
+                    </ul>
+                    <li>Delete Door - This button completely removes the door from the model.</li>
+                </ul>
+
+
+
+                <!-- hvac -->
+                <p class="h3 mt-4 pt-4" id="hvac">HVAC</p>
+                <p>Back to the left panel, below the doors are the options for HVAC. Click on it and add it to the block that was created above.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/hvac 2.png' %}" />
+
+                <p class="mb-0 mt-4">Now you will notice a new button on the right hand side, under the HVAC table. This represents your new HVAC. Click on it to open the HVAC editor as shown below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/hvac 3.png' %}" />
+                
+                <p class="mb-0 mt-4">In the HVAC editor are the following fields:</p>
+                <ul>
+                    <li>Type - This is a read only field showing the type of object being edited.</li>
+                    <li>Name - This is the name of this HVAC.</li>
+                    <li>Visible - Turning this on/off will show/hide the HVAC. It doesn't delete it.</li>
+                    <li>Delete HVAC - This button completely removes the HVAC from the model.</li>
+                </ul>
+
+
+
+                <!-- lights -->
+                <p class="h3 mt-4 pt-4" id="lights">Lights</p>
+                <p>Back to the left panel, below the HVAC are the options for lights. Click on it and add it to the block that was created above.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/lights 2.png' %}" />
+
+                <p class="mb-0 mt-4">Now you will notice a new button on the right hand side, under the Lights table. This represents your new light. Click on it to open the HVAC editor as shown below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/lights 3.png' %}" />
+                
+                <p class="mb-0 mt-4">In the lights editor are the following fields:</p>
+                <ul>
+                    <li>Type - This is a read only field showing the type of object being edited.</li>
+                    <li>Name - This is the name of this light.</li>
+                    <li>Visible - Turning this on/off will show/hide the light. It doesn't delete it.</li>
+                    <li>Watts - The amount of watts th light uses.</li>
+                    <li>Schedule - The time period when the lights are on/off.</li>
+                    <ul>
+                        <li>On Time - The time the lights are turned on.</li>
+                        <li>Off Time - The time the lights are turned off.</li>
+                    </ul>
+                    <li>Delete Light - This button completely removes the light from the model.</li>
+                </ul>
+
+
+                <!-- text -->
+                <p class="h3 mt-4 pt-4" id="texts">Text</p>
+                <p>Back to the left panel, below the Lights are the options for texts. Click on it and add it to the block that was created above.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/text.png' %}" />
+
+                <p class="mb-0 mt-4">Now you will notice a new button on the right hand side, under the Texts table. This represents your new text. Click on it to open the texts editor as shown below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/text 2.png' %}" />
+                
+                <p class="mb-0 mt-4">In the texts editor are the following fields:</p>
+                <ul>
+                    <li>Type - This is a read only field showing the type of object being edited.</li>
+                    <li>Text - This is the text shown.</li>
+                    <li>Visible - Turning this on/off will show/hide the light. It doesn't delete it.</li>
+                    <li>Delete Text - This button completely removes the text from the model.</li>
+                </ul>
+
+
+                <!-- windows -->
+                <p class="h3 mt-4 pt-4" id="windows">Windows</p>
+                <p>Back to the left panel, below the Texts are the options for windows. There are two options, horizontal window and vertical window. Horizontal windows can only be added on horizontal walls and vertical windows can only be added on vertical walls. Click on one and add it to the block that was created above.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/windows 2.png' %}" />
+
+                <p class="mb-0 mt-4">Now you will notice a new button on the right hand side, under the Windows table. This represents your new window. Click on it to open the windows editor as shown below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/windows 4.png' %}" />
+                <p class="mb-0 mt-4">In the lights editor are the following fields:</p>
+                <ul>
+                    <li>Type - This is a read only field showing the type of object being edited.</li>
+                    <li>Name - This is the name of this window.</li>
+                    <li>Visible - Turning this on/off will show/hide the window. It doesn't delete it.</li>
+                    <li>Material</li>
+                    <ul>
+                        <li>Layer 1 - The material the window is made of.</li>
+                    </ul>
+                    <li>Delete Window - This button completely removes the window from the model.</li>
+                </ul>
+            </div>
+
+
+
+            <div class="mt-4 pt-4" id="running-a-simulation">
+                <h1 class="text-center">Running a Simulation</h1>
+                <p>In order to run a simulation, go ahead and create a sample model. Like the one given below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/sample building.png' %}" />
+
+                <p class="mt-4 pt-4">When done, click the "Details" button on the top panel. Or go back to the dashboard and then click "Details" from there. This will show the model details as shown below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/sample details.png' %}" />
+
+                <p class="mt-4 pt-4">To get the energy usage of the building we created, click the button "Run Simulation". This will show the results below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/sample simulation results.png' %}" />
+
+                <p class="mt-4 pt-4">The cooling and heating shows nothing because we didn't add any HVAC. Let us go back to the editor and add one as shown below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/sample building with HVAC.png' %}" />
+
+                <p class="mt-4 pt-4">Now go back to the details page and run the simulation again to get the results below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/sample simulation results 2.png' %}" />
+
+            </div>
+
+
+            <div class="mt-4 pt-4" id="analyzing-simulation-results">
+                <h1 class="text-center">Analyzing Simulation Results</h1>
+                <p>After the simulation is complete, go to the bottom of each graph. This is where the results are analysed and any suggestions are made as shown below.</p>
+                <img class="border text-center" width="70%" src="{% static 'images/sample analyzed data.png' %}" />
+
+                <p class="mt-4 pt-4">How we determine the energy efficiency of the building is through its Energy Use Intensity (EUI). This is simply how much energy a building uses per square meter, per year.</p>
+
+            </div>
+
+
+            <div class="mt-4 pt-4" id="sustainable-contruction-materials">
+                <h1 class="text-center">Sustainable Contruction Materials</h1>
+                <p><span class="fw-bold">Zambian Climatic Context: </span>Characterized by a tropical climate with three distinct seasons: a cool, dry winter (May-August), a hot, dry spring (September–October), and a warm, wet summer (November–April). Key architectural objectives are maximizing thermal mass to buffer diurnal temperature swings, controlling solar heat gain, and managing high humidity/rainfall during the wet season.</p>
+
+                <!-- walls -->
+                <p class="h3 mt-4 pt-4">1. Wall Materials & Multi-Layer Assemblages</p>
+                <p>Walls constitute the primary thermal envelope. In Zambia, balancing thermal mass (to delay heat transfer during hot days) and insulation is vital. Below are the optimal configurations using the specified materials.</p>
+                <p>This configuration maximizes thermal delay and insulation efficiency, perfectly suited for the hot dry season before the rains.</p>
+                <table class="table table-striped">
+                    <thead>
+                        <th>Layer</th>
+                        <th>Material</th>
+                        <th>Reasoning</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Layer 1 (External)</td>
+                            <td>Red Clay Face Brick (115mm)</td>
+                            <td>High durability, low maintenance, excellent thermal mass.</td>
+                        </tr>
+                        <tr>
+                            <td>Layer 2</td>
+                            <td>Grey Cement Plaster (15mm)</td>
+                            <td>Structural backing and moisture barrier.</td>
+                        </tr>
+                        <tr>
+                            <td>Layer 3 (Core)</td>
+                            <td>Glass Wool (50mm) or EPS </td>
+                            <td>Thermal insulation block against ambient heat.</td>
+                        </tr>
+                        <tr>
+                            <td>Layer 4</td>
+                            <td>Cement Block or Clay Brick (150mm)</td>
+                            <td>Internal load-bearing thermal mass.</td>
+                        </tr>
+                        <tr>
+                            <td>Layer 5 (Internal)</td>
+                            <td>White Plaster or Gypsum Plaster (12mm)</td>
+                            <td>High albedo internal finish.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p class="mt-4 pt-4 text-center">Material Suitability Matrix for Walls</p>
+                <table class="table table-striped">
+                    <thead>
+                        <th>Material</th>
+                        <th>Performance Rating</th>
+                        <th>Zambian Climate Guidelines and Best Practices</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Red Clay Face Brick</td>
+                            <td>Excellent</td>
+                            <td>Highly sustainable due to local soil availability. Excellent thermal mass property slows down heat transfer into interiors during peak daylight (12:00 - 15:00)</td>
+                        </tr>
+                        <tr>
+                            <td>Concrete Blocks / Cement Block</td>
+                            <td>Moderate</td>
+                            <td>Widely available but has lower thermal resistance than clay. Best utilized for internal structural partitions where they are shielded from direct solar radiation.</td>
+                        </tr>
+                        <tr>
+                            <td>Glass Wool / EPS / Polyurethane Foam</td>
+                            <td>Excellent ( Core )</td>
+                            <td>Crucial for cavity walls. Prevents heat radiating from the outer brick layer from penetrating the inner living space. Glass wool is preferred for fire safety.</td>
+                        </tr>
+                        <tr>
+                            <td>White Plaster / Gypsum Plaster</td>
+                            <td>Recommended</td>
+                            <td>White internal finishes improve natural daylighting. Gypsum plaster provides a smooth finish and acts as a minor humidity buffer during rainy seasons.</td>
+                        </tr>
+                        <tr>
+                            <td>Aluminum Cladding</td>
+                            <td>Conditional</td>
+                            <td>Can reflect solar radiation but risks creating a heat-trap if installed without a ventilated air cavity beneath it. High embodied energy.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <!-- roof -->
+                <p class="h3 mt-4 pt-4">2. Roof Materials & Thermal Performance</p>
+                <p>The roof receives the highest solar radiation in Zambia. Mitigation of radiant heat transfer into the ceiling void is a critical priority.</p>
+                <p class="text-center">Optimal Roof Insulation Assembly</p>
+                <table class="table table-striped">
+                    <thead>
+                        <th>Layer</th>
+                        <th>Material</th>
+                        <th>Reasoning</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Layer 1 (Top)</td>
+                            <td>Concrete Roof Tiles or Steel Roofing Tiles</td>
+                            <td>Heavy mass or high reflectance.</td>
+                        </tr>
+                        <tr>
+                            <td>Layer 2</td>
+                            <td>Air Cavity (Ventilated Attic Space)</td>
+                            <td>Dissipates accumulated radiant heat.</td>
+                        </tr>
+                        <tr>
+                            <td>Layer 3</td>
+                            <td>Polyurethane Foam or Glass Wool Layer</td>
+                            <td>Retards heat downward conduction.</td>
+                        </tr>
+                        <tr>
+                            <td>Layer 4 (Ceiling)</td>
+                            <td>Plasterboard (Drywall) (12mm)</td>
+                            <td>Smooth internal boundary finish.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Guidelines by Material Type</p>
+                <ul>
+                    <li><span class="fw-bold">Concrete Roof Tiles:</span> Excellent choice for residential structures. Their high thermal mass retards solar heat penetration, releasing stored heat during the cooler night hours.</li>
+                    <li><span class="fw-bold">Steel Roofing Tiles / Aluminum Roofing Sheets:</span> Lightweight and highly reflective if coated properly. Aluminum offers superb corrosion resistance during Zambia’s heavy wet season. They must be coupled with under-roof insulation (e.g., PU Foam) to avoid massive radiant heat transfers and acoustic noise during heavy downpours.</li>
+                    <li><span class="fw-bold">Corrugated Iron Sheets:</span> Least sustainable option thermally. They transfer heat instantly into the building envelope. If used due to budget constraints, a minimum 50mm Glass Wool or EPS layer must be installed on top of the drywall ceiling.</li>
+                </ul>
+
+
+                <!-- floor -->
+                <p class="h3 mt-4 pt-4">3. Floor Materials & Thermal Mass Optimization</p>
+                <p>Floors in passive solar design act as a thermal sink. During Zambia's cool dry season, floors can store heat during the day and radiate it at night. In hot seasons, they remain comfortably cool if shaded from direct sunlight.</p>
+                <p class="text-center">Optimal High-Mass Floor Assembly</p>
+                <table class="table table-striped">
+                    <thead>
+                        <th>Layer</th>
+                        <th>Material</th>
+                        <th>Reasoning</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Layer 1 (Surface)</td>
+                            <td>Granite, Marble, or Polished Concrete</td>
+                            <td>Ultimate thermal sinks.</td>
+                        </tr>
+                        <tr>
+                            <td>Layer 2</td>
+                            <td>Screed / Mortar Bed</td>
+                            <td>Mechanical bond layer.</td>
+                        </tr>
+                        <tr>
+                            <td>Layer 3</td>
+                            <td>Reinforced Concrete Slab</td>
+                            <td>Primary load bearing and structural mass.</td>
+                        </tr>
+                        <tr>
+                            <td>Layer 4</td>
+                            <td>Hardcore / Compacted Earth</td>
+                            <td>Direct thermal connection to the ground.</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                <p>Best Practices for Floor Selection</p>
+                <ul>
+                    <li><span class="fw-bold">Granite, Marble, & Polished Concrete:</span> Top tier choices for living areas. They feel cool to the touch because they draw heat away from the human body rapidly, drastically reducing the localized cooling load requirements.</li>
+                    <li><span class="fw-bold">Ceramic & Porcelain Tiles:</span> Highly sustainable, cost-effective, and practical for wet areas. They maintain good thermal contact with the slab, allowing the floor to function effectively as a passive heat sink.</li>
+                    <li><span class="fw-bold">Hardwood Flooring:</span> Insulates the floor slab. While visually warm and luxurious, it reduces the floor’s capacity to act as a cooling thermal mass during hot months. Best limited to bedrooms where nighttime warmth is desired.</li>
+                    <li><span class="fw-bold">PVC/Vinyl Tiles:</span> Low thermal capacity and high synthetic content. Not recommended for living spaces aiming for optimal passive climatic control.</li>
+                </ul>
+
+
+                <!-- window -->
+                <p class="h3 mt-4 pt-4">4. Window Glazing & Solar Heat Gain Control</p>
+                <p>Windows are responsible for the largest percentage of structural heat gain. In Zambia, controlling the Solar Heat Gain Coefficient (SHGC) is mandatory to prevent greenhouse effects inside buildings.</p>     
+                <table class="table table-striped">
+                    <thead>
+                        <th>Glazing Type</th>
+                        <th>Thermal Efficiency</th>
+                        <th>Zambian Application Strategy</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Double Glazing Low-e 4-6-4mm air</td>
+                            <td>Premium Standard</td>
+                            <td>The absolute best choice for North and West-facing facades. The Low-E (low-emissivity) coating reflects long-wave infrared heat while letting in visible light.</td>
+                        </tr>
+                        <tr>
+                            <td>Double Glazing Clear 4-6-4mm air</td>
+                            <td>Good</td>
+                            <td>Provides great acoustic insulation and controls conductive heat, but still permits significant solar heat gain unless paired with external shading (louvers or deep eaves).</td>
+                        </tr>
+                        <tr>
+                            <td>Single Tinted/Bronze 4mm</td>
+                            <td>Acceptable</td>
+                            <td>Reduces glare and solar heat gain effectively for low-budget implementations, but absorbs heat into the glass pane which can radiate inwards if unventilated.</td>
+                        </tr>
+                        <tr>
+                            <td>Single Clear 4mm Glass</td>
+                            <td>Poor</td>
+                            <td>Creates severe greenhouse conditions during the hot dry season. Avoid using on any unshaded East, West, or North facades.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <!-- door -->
+                <p class="h3 mt-4 pt-4">5. Door Systems & Air Tightness</p>
+                <p>Doors must prevent hot air infiltration during summer and preserve internal temperatures during cool winter nights.</p>
+                <ul>
+                    <li><span class="fw-bold">Steel Skin with PU Foam Core:</span> The most energy-efficient entry door configuration. The steel skin provides structural stability and security, while the highly dense Polyurethane (PU) Foam core serves as an exceptional thermal break.</li>
+                    <li><span class="fw-bold">Hardwood (Pine):</span> A natural carbon-sequestering option. Pine offers good natural thermal resistance but must be well-seasoned and sealed to prevent warping under Zambia’s contrasting wet and dry humidity extremes.</li>
+                </ul>
+
+                <p class="mt-2 pt-2">Strategic Summary for Zambia: To achieve net-zero or highly sustainable buildings in Lusaka, Ndola, or Livingstone, designers should prioritize a High Mass - External Insulation approach. Use Red Clay Face Bricks with Glass Wool insulation cavities, install Concrete Roof Tiles over insulated attics, lay down Polished Concrete or Granite floors, and specify Double Glazing Low-E windows on all sun-exposed facades.</p>
+            </div>
+            
+        </div>
+
+
+    </div>
+{% endblock content %}

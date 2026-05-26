@@ -1,0 +1,47 @@
+{% extends "index/base.html" %}
+
+{% block title %}ZEDT - Contact Us{%endblock title %}
+
+{% block content %}
+    <div class="container-fluid mx-4 my-5">
+        <p class="fw-bolder h3 mb-4 text-center">Get in Touch</p>
+        <div class="row">
+            <div class="col">
+                <div class="bg-light border container-fluid p-4 rounded">
+                    <form method="post" action="#">
+                        {% csrf_token %}
+                        <div class="container-fluid my-2 text-start">
+                            <label for="full_name" class="form-label">Full Name</label>
+                            <input class="form-control" id="full_name" name="full_name" type="text" required>
+                        </div>
+                        <div class="container-fluid my-2 text-start">
+                            <label for="email" class="form-label">Email</label>
+                            <input class="form-control" id="email" name="email" type="email" required>
+                        </div>
+                        <div class="container-fluid my-2 text-start">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" name="message" style="height:150px;" required></textarea>
+                        </div>       
+                        <input class="btn btn-primary my-2" type="submit" value="SEND MESSAGE">
+                    </form>
+                </div>
+            </div>
+            <div class="col">
+                <div class="container-fluid">
+                    <p class="fw-bolder text-success">Our Office</p>
+                    <p class="mb-0">123 Eco-Innovation Hub</p>
+                    <p class="mb-0">Central District, Lusaka</p>
+                    <p class="mb-0">Zambia</p>
+
+                    <p class="fw-bolder mt-4 text-success">Direct Contact</p>
+                    <p class="mb-0"><span class="fw-bolder">Email</span>: hello@greenhorizon.labs</p>
+                    <p class="mb-0"><span class="fw-bolder">Phone</span>: +260 970 000 000</p>
+
+                    <p class="fw-bolder mt-4 text-success">Working Hours</p>
+                    <p class="mb-0">Monday - Friday: 08:00 - 17:00</p>
+                    <p class="mb-0">Saturday: 09:00 - 13:00</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

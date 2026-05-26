@@ -1,0 +1,35 @@
+{% extends "index/base.html" %}
+
+{% block title %}ZEDT{%endblock title %}
+
+{% block content %}
+    
+    <div class="bg-primary container-fluid my-4 py-4 text-center text-light">
+        <h1 class="text-center fw-bolder my-4" style="font-size: 50px;">Build Smarter. Live Greener</h1>
+        <p class="my-4">Designing structures that minimize environmental impact and maximize energy savings.</p>
+        <!--a class="btn btn-warning mb-4" href="{% url 'index:explore_designs' %}">Explore Designs</a-->
+    </div>
+
+
+    <div class="container-fluid my-4">
+        <h1 class="fw-bold mt-4 text-center text-success">Our Core Design Principles</h1>
+        <div class="row d-flex" style="justify-content: center;">
+            <div class="bg-light border col-sm-3 m-2 p-4 rounded">
+                <h5 class="fw-bold text-primary">Passive Design</h5>
+                <hr />
+                <p>Harnessing natural elements like sunlight and shade to regulate temperature.</p>
+            </div>
+            <div class="bg-light border col-sm-3 m-2 p-4 rounded">
+                <h5 class="fw-bold text-primary">High Efficiency Systems</h5>
+                <hr />
+                <p>Implementing optimized Heating, lighting, and ventilation technologies.</p>
+            </div>
+            <div class="bg-light border col-sm-3 m-2 p-4 rounded">
+                <h5 class="fw-bold text-primary">Sustainable Materials</h5>
+                <hr />
+                <p>Using low-embodied energy, recycled, and locally sourced construction materials.</p>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

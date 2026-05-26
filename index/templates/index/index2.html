@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoBuild | Energy Efficient Design</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Global Styles --- */
+        :root {
+            --primary-color: #38761d; /* Deep Green */
+            --secondary-color: #1c4587; /* Deep Blue */
+            --accent-color: #f7b400; /* Yellow-Orange Accent */
+            --light-bg: #f5f5f5;
+            --text-color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        /* --- Header & Navigation --- */
+        header {
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 25px;
+        }
+
+        nav ul a {
+            color: var(--text-color);
+            font-weight: 600;
+            padding-bottom: 5px;
+            transition: color 0.3s;
+        }
+
+        nav ul a:hover,
+        nav ul a.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .menu-icon {
+            display: none; /* Hidden on desktop */
+            font-size: 1.5em;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            background: var(--secondary-color);
+            color: #fff;
+            padding: 100px 0;
+            text-align: center;
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-section h2 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .hero-section p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .cta-button {
+            background: var(--accent-color);
+            color: var(--text-color);
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background: #e6a700;
+        }
+
+        /* --- Principles Section --- */
+        .principles-section {
+            padding: 60px 0;
+            background: var(--light-bg);
+            text-align: center;
+        }
+
+        .principles-section h3 {
+            font-size: 2em;
+            margin-bottom: 40px;
+            color: var(--primary-color);
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .principle-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            text-align: left;
+            transition: transform 0.3s;
+        }
+
+        .principle-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .principle-card h4 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        /* --- Quote Section --- */
+        .quote-section {
+            background: var(--primary-color);
+            color: #fff;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        blockquote {
+            font-size: 1.5em;
+            font-style: italic;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: var(--text-color);
+            color: #fff;
+            padding: 20px 0;
+        }
+
+        footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9em;
+        }
+
+        .social-links a {
+            color: #fff;
+            margin-left: 15px;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* --- Responsive Design (Mobile) --- */
+        @media (max-width: 768px) {
+            header .container {
+                flex-wrap: wrap;
+            }
+
+            nav {
+                width: 100%;
+                order: 3;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-in-out;
+            }
+
+            nav.open {
+                max-height: 300px; /* Adjust based on content */
+            }
+
+            nav ul {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px 0;
+                background: #fcfcfc;
+                border-top: 1px solid #eee;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+
+            .menu-icon {
+                display: block; /* Show menu icon on mobile */
+            }
+
+            .hero-section {
+                padding: 80px 0;
+            }
+
+            .hero-section h2 {
+                font-size: 2.5em;
+            }
+            
+            footer .container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            footer p {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">EcoBuild</h1>
+            <nav>
+                <ul>
+                    <li><a href="#hero" class="active">Home</a></li>
+                    <li><a href="#principles">Principles</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <button id="menu-toggle" class="menu-icon">&#9776;</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="hero-section">
+            <div class="container">
+                <h2>Build Smarter. Live Greener.</h2>
+                <p>Designing structures that minimize environmental impact and maximize energy savings.</p>
+                <a href="#services" class="cta-button">Explore Designs</a>
+            </div>
+        </section>
+
+        <section id="principles" class="principles-section">
+            <div class="container">
+                <h3>Our Core Design Principles</h3>
+                <div class="principles-grid">
+                    <div class="principle-card">
+                        <h4>Passive Design</h4>
+                        <p>Harnessing natural elements like sunlight and shade to regulate temperature.</p>
+                    </div>
+                    <div class="principle-card">
+                        <h4>High Efficiency Systems</h4>
+                        <p>Implementing optimized HVAC, lighting, and water heating technologies.</p>
+                    </div>
+                    <div class="principle-card">
+                        <h4>Sustainable Materials</h4>
+                        <p>Using low-embodied energy, recycled, and locally sourced construction materials.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="quote" class="quote-section">
+            <div class="container">
+                <blockquote>"The greenest building is the one that is already built." - Carl Elefante</blockquote>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 EcoBuild. Energy Efficiency Solutions.</p>
+            <div class="social-links">
+                <a href="#">[F]</a> | <a href="#">[T]</a> | <a href="#">[L]</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const nav = document.querySelector('nav');
+
+            // Toggle mobile menu visibility
+            menuToggle.addEventListener('click', () => {
+                nav.classList.toggle('open');
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    // Close menu after clicking a link on mobile
+                    nav.classList.remove('open'); 
+
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

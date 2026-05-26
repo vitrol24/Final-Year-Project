@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="charset" content="utf-8">
+        <title>{% block title %}{% endblock title %}</title>
+        <link href="{% static 'bootstrap-5.3.3/css/bootstrap.min.css' %}" rel="stylesheet" />
+        <script src="{% static 'bootstrap-5.3.3/js/bootstrap.bundle.min.js' %}" type="text/javascript"></script>
+    </head>
+    <body>
+        
+        <header class="border-bottom">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary rounded" aria-label="Thirteenth navbar example">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample11" aria-controls="navbarsExample11" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse d-lg-flex" id="navbarsExample11">
+                        <a class="col-lg-3 fw-bolder me-0 navbar-brand text-success" style="font-size:30px;" href="{% url 'index:index' %}"><u>ZEDT</u></a>
+                        <ul class="navbar-nav col-lg-6 justify-content-lg-center">
+                            <li class="nav-item">
+                                <a class="nav-link link-primary" href="{% url 'index:index' %}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link link-primary" href="{% url 'index:documentation' %}">Documentation</a>
+                            </li>
+                            <!--li class="nav-item">
+                                <a class="nav-link link-primary" href="{% url 'index:explore_designs' %}">Explore Designs</a>
+                            </li-->
+                            <li class="nav-item">
+                                <a class="nav-link link-primary" href="{% url 'index:about_us' %}">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link link-primary" href="{% url 'index:contact_us' %}">Contact Us</a>
+                            </li>
+                        </ul>
+                        <div class="d-lg-flex col-lg-3 justify-content-lg-end">
+                            <a class="btn btn-primary me-2" href="{% url 'user:login' %}">LOGIN</a>
+                            <a class="btn btn-primary" href="{% url 'user:signup' %}">SIGNUP</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+
+
+
+
+
+
+        <main class="container-fluid">
+            <!-- FLASH MESSAGES -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{message.tags}}{% endif %}  alert-dismissible" role="alert">
+                        {{message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- main content -->
+            {% block content %}{% endblock content %}
+        </main>
+
+
+
+
+
+        <footer class="bg-secondary container-fluid" style="height: 60px;">
+            <p class="text-light">&copy; 2025 Zambia Eco Design Toolkit. Energy Efficiency Solutions.</p>
+        </footer>
+
+
+
+    </body>
+</html>
