@@ -1,0 +1,6 @@
+<svg width="256" height="256" version="1.1" 
+xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="100%" height="100%" style="fill:white;" />
+    <path d="M125 20 H236 V236 H20 V125 H125 V20" style="fill:none;  stroke:black;  stroke-width:10;" />
+</svg>
+
