@@ -1,0 +1,30 @@
+#left-panel{
+    border: 1px solid black;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    left: 0px;
+    position: absolute;
+    width: 15%;
+}
+
+#center-panel{
+    box-sizing: border-box;
+    height: 100%;
+    left: 15%;
+    position: absolute;
+    width: calc(100% - calc(15% + 15%));
+}
+
+#right-panel{
+    border: 1px solid black;
+    box-sizing: border-box;
+    height: 100%;
+    right: 0px;
+    position: absolute;
+    width: 15%;
+}
+
+
+
