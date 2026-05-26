@@ -1,0 +1,79 @@
+{% load static %}
+<div class="container-fluid py-2" id="door_editor" style="display:none;">
+
+
+    <!-- type -->
+    <div class="mb-2">
+        <label for="type" class="form-label text-light" style="user-select:none;">Type</label>
+        <input class="form-control" id="type" type="text" value="Door" readonly>
+    </div>
+
+    
+    <!-- name -->
+    <div class="mb-2">
+        <label for="name" class="form-label text-light" style="user-select:none;">Name</label>
+        <input class="form-control" id="name" type="text">
+    </div>
+
+    
+    <!-- visible -->
+    <div class="mb-4 form-check">
+        <input type="checkbox" class="form-check-input" id="visible">
+        <label class="form-check-label text-light" for="visible" style="user-select:none;">Visible</label>
+    </div>
+
+
+
+    <!-- door materials -->
+    <hr class="text-light"/>
+    <p class="mb-0 mt-4 text-center text-light" style="user-select:none;">Material</p>
+    <div class="mb-2">
+        <label for="layer_1" class="form-label text-light" style="user-select:none;">Layer 1</label>
+        <select class="form-select" id="layer_1">
+            <option value="Hardwood (Pine)">Hardwood (Pine)</option>
+            <option value="Steel (Skin)">Steel (Skin)</option>
+            <option value="PU Foam (Core)">PU Foam (Core)</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="layer_2" class="form-label text-light" style="user-select:none;">Layer 2</label>
+        <select class="form-select" id="layer_2">
+            <option value=""></option>
+            <option value="Hardwood (Pine)">Hardwood (Pine)</option>
+            <option value="Steel (Skin)">Steel (Skin)</option>
+            <option value="PU Foam (Core)">PU Foam (Core)</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="layer_3" class="form-label text-light" style="user-select:none;">Layer 3</label>
+        <select class="form-select" id="layer_3">
+            <option value=""></option>
+            <option value="Hardwood (Pine)">Hardwood (Pine)</option>
+            <option value="Steel (Skin)">Steel (Skin)</option>
+            <option value="PU Foam (Core)">PU Foam (Core)</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="layer_4" class="form-label text-light" style="user-select:none;">Layer 4</label>
+        <select class="form-select" id="layer_4">
+            <option value=""></option>
+            <option value="Hardwood (Pine)">Hardwood (Pine)</option>
+            <option value="Steel (Skin)">Steel (Skin)</option>
+            <option value="PU Foam (Core)">PU Foam (Core)</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="layer_5" class="form-label text-light" style="user-select:none;">Layer 5</label>
+        <select class="form-select" id="layer_5">
+            <option value=""></option>
+            <option value="Hardwood (Pine)">Hardwood (Pine)</option>
+            <option value="Steel (Skin)">Steel (Skin)</option>
+            <option value="PU Foam (Core)">PU Foam (Core)</option>
+        </select>
+    </div>
+
+
+    
+    <!-- delete button -->
+    <button class="btn btn-sm btn-danger" id="delete_door_btn">Delete Door</button>
+</div>

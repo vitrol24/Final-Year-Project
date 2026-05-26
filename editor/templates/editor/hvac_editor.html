@@ -1,0 +1,227 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="charset" content="utf-8">
+        <title>ZEDT - HVAC Editor</title>
+        <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+        <link rel="stylesheet" href="{% static 'bootstrap-5.3.3/css/bootstrap.min.css' %}">
+        <script src="{% static 'bootstrap-5.3.3/js/bootstrap.bundle.min.js' %}"></script>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "PIXI": "{% static 'libs/pixi.min.mjs' %}",
+                    
+                    "functions": "{% static 'scripts/functions.js' %}",
+                    "values": "{% static 'scripts/values.js' %}"
+                }
+            }
+        </script>
+        
+
+
+        <!-- put project data inside script tag with id projet_data -->
+        <p class="d-none" id="project_uuid">{{project.uuid}}</p>
+        {{project.data|json_script:"project_data"}}
+        
+        
+
+    </head>
+    <body class="bg-light" style="margin:0px; overflow: hidden; padding: 0px;">
+
+
+
+        <!--header class="bg-dark rounded shadow" style="position:absolute; left:50%; top:5px; transform:translateX(-50%);  z-index:1000;">
+            
+            <div class="btn-group px-2 py-2">
+                <a class="btn btn-secondary btn-sm" href="{% url 'user:dashboard' %}">Dashboard</a>
+                <a class="btn btn-secondary btn-sm" href="{% url 'user:project_details' project.uuid %}">Details</a>
+                <a class="btn btn-secondary btn-sm"  href="{% url 'editor:index' project.uuid %}">Edit</a>
+                <button class="btn btn-secondary btn-sm" id="download_btn" disabled>Download</button>
+                <a class="btn btn-secondary btn-sm"  href="{% url 'editor:2d_view' project.uuid %}">2D View</a>
+                <a class="btn btn-secondary btn-sm"  href="{% url 'editor:3d_view' project.uuid %}">3D View</a>
+            </div>
+        </header-->
+
+
+
+
+
+
+        <main class="d-flex" style="flex-direction:column;">
+
+        </main>
+
+
+
+
+
+
+
+        <script type="text/javascript">
+            class GraphEditor{
+                static instance = null;
+                constructor(){
+                    this.nodes = [];
+                    this.dom = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+
+
+
+                    if(GraphEditor.instance == null){
+                        GraphEditor.instance = this;
+                    }
+                    return GraphEditor.instance;
+                }
+
+
+                addNode(node){
+                    this.nodes.push(node);
+                    this.dom.appendChild(node.dom);
+                }
+
+                removeNode(node){
+                    
+                }
+
+
+
+            }
+
+
+
+
+            class FanNode{
+                constructor(){
+                    this.id = `${Math.random() * Math.random() * Math.random()}`;
+                    this.params = [
+                        {type:"number", name:"Efficiency", value:0.7},
+                        {type:"number", name:"aertyg", value:0.7}
+
+                    ];
+                    this.type = "fan";
+
+
+                    this.dom = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    this.dom.style.boxShadow = "10px 10px 10px green";
+                    this.dom.setAttribute("width", 300);
+                    this.dom.setAttribute("height", 300);
+
+
+                    this.bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    this.dom.appendChild(this.bg);
+                    this.bg.setAttribute("x", 0);
+                    this.bg.setAttribute("y", 0);
+                    this.bg.setAttribute("width", "100%");
+                    this.bg.setAttribute("height", "100%");
+                    this.bg.style = "box-shadow:5px 5px 5px rgba(0,0,0,0.5); fill:#afafaf; stroke:black;"
+
+
+                    this.title = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    this.dom.appendChild(this.title);
+                    this.title.innerHTML = "Fan";
+                    this.title.style = "fill:black; font-size:25px; stroke:black;";
+                    this.title.setAttribute("x", 0);
+                    this.title.setAttribute("y", 20);
+
+                    
+
+
+                    this.param_editors = createNodeParamEditors(this.params);
+                    this.dom.appendChild(this.param_editors);
+                    
+                    
+                }
+            }
+
+
+
+
+
+            class HeatingCoilNode{
+                constructor(){
+                    this.id = `${Math.random() * Math.random() * Math.random()}`;
+                    this.params = [
+                        {type:"number", name:"Efficiency", value:0.7}
+                    ];
+                    this.type = "fan";
+
+                    this.dom = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    this.param_editors = createNodeParamEditors(this.params);
+                    this.dom.appendChild(this.param_editors);
+
+                }
+            }
+
+
+
+
+            function createNodeParamEditors( params ){
+                let result = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                result.setAttribute("x", 0);
+                result.setAttribute("y", 50);
+                result.setAttribute("width", "100%");
+                result.setAttribute("height", "100%");
+                result.style = "border:1px solid red;  display:flex; flex-direction:column;";
+                console.log(result.outerHTML);
+
+
+                let last_y = 0;
+
+                for(let param of params){
+                    if(param.type == "number"){
+                        
+                        let foreign_object = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+                        result.appendChild(foreign_object);
+                        foreign_object.setAttribute("x", 0);
+                        foreign_object.setAttribute("y", last_y);
+                        foreign_object.setAttribute("width", "100%");
+                        foreign_object.setAttribute("height", 25);
+                        last_y += Number(foreign_object.getAttribute("y")) + Number(foreign_object.getAttribute("height"));
+                        
+
+                        let param_name = document.createElementNS("http://www.w3.org/1999/xhtml", "input");
+                        foreign_object.appendChild(param_name);
+                        param_name.xmlns = "https://www.w3.org/1999/xhtml";
+                        param_name.value = param.name;
+                        param_name.style = "background-color:transparent; border:none; height:100%; outline:none; user-selects:none; width:50%";
+                        param_name.readOnly = true;
+                        
+
+                        let param_value = document.createElementNS("http://www.w3.org/1999/xhtml", "input");
+                        foreign_object.appendChild(param_value);
+                        param_value.setAttribute("type", "number");
+                        param_value.style.width = "50%";
+                        param_value.style.height = "100%";
+
+
+
+
+
+
+                        
+                    }
+                }
+
+
+                return result;
+            }
+
+
+
+
+
+
+
+
+            let editor = new GraphEditor();
+            document.body.appendChild(editor.dom);
+            editor.addNode(new FanNode());
+
+
+            
+        </script>
+    </body>
+</html>

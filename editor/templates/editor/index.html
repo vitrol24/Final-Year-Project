@@ -1,0 +1,347 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="charset" content="utf-8">
+        <title>ZEDT - Editor</title>
+        <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+        <link rel="stylesheet" href="{% static 'bootstrap-5.3.3/css/bootstrap.min.css' %}">
+        <script src="{% static 'bootstrap-5.3.3/js/bootstrap.bundle.min.js' %}"></script>
+
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "PIXI": "{% static 'libs/pixi.min.mjs' %}",
+                    "THREE" : "{% static 'libs/three/three.module.min.js' %}",
+                    "OrbitControls": "{% static 'three/OrbitControls.js' %}",
+
+                    "functions": "{% static 'scripts/functions.js' %}",
+                    "values": "{% static 'scripts/values.js' %}"
+                }
+            }
+        </script>
+        <script type="module" src="{% static 'scripts/main.js' %}"></script>
+
+
+
+        <!-- put project data inside script tag with id projet_data -->
+        <p class="d-none" id="project_uuid">{{project.uuid}}</p>
+        {{project.data|json_script:"project_data"}}
+        
+        
+
+    </head>
+    <body class="bg-light" style="margin:0px; overflow: hidden; padding: 0px;">
+
+        <!-- FORM USED TO SAVE PROJECT -->
+        <form action="{% url 'user:save_project' project.uuid %}" class="d-none" id="save_project_form" method="post">
+            {% csrf_token %}
+            <input id="project_data" name="project_data" type="text">
+        </form>
+
+
+
+
+        <header class="bg-dark rounded shadow" style="position:absolute; left:50%; top:5px; transform:translateX(-50%);  z-index:1000;">
+            <!-- top menu -->
+            <div class="btn-group px-2 py-2">
+                <a class="btn btn-secondary btn-sm" href="{% url 'user:dashboard' %}">Dashboard</a>
+                <a class="btn btn-secondary btn-sm" href="{% url 'user:project_details' project.uuid %}">Details</a>
+                <button class="btn btn-secondary btn-sm" id="save_btn">Save</button>
+                <a class="btn btn-secondary btn-sm"  href="{% url 'editor:2d_view' project.uuid %}">2D View</a>
+                <!--a class="btn btn-secondary btn-sm"  href="{% url 'editor:3d_view' project.uuid %}">3D View</a-->
+            </div>
+        </header>
+
+
+
+
+
+
+        <main class="d-flex" style="flex-direction:column;">
+
+            <!-- load some texures used for the floor -->
+            <img id="ceramic_tiles_texture" src="{% static 'images/floor/tiles.jpg' %}" style="display:none;">
+            <img id="granite_texture" src="{% static 'images/floor/granite.jpg' %}" style="display:none;">
+            <img id="hardwood_texture" src="{% static 'images/floor/wood 2.jpg' %}" style="display:none;">
+            <img id="marble_texture" src="{% static 'images/floor/marble.jpg' %}" style="display:none;">
+            <img id="polished_concrete_texture" src="{% static 'images/floor/concrete.jpg' %}" style="display:none;">
+            <img id="porcelain_tiles_texture" src="{% static 'images/floor/tiles.jpg' %}" style="display:none;">
+            <img id="pvc_tiles_texture" src="{% static 'images/floor/tiles.jpg' %}" style="display:none;">
+            <img id="hvac_texture" src="{% static 'images/gui/hvac.svg' %}" width="100%" height="100%" />
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="d-flex" style="height:100%;  position:absolute;  width:100%;">
+                
+                <!-- mode panel -->
+                <div class="bg-secondary" style="height:100%; overflow-y:scroll; width:20%;">
+                    <div class="container-fluid m-0 p-0">
+                        <p class="fw-bolder m-0 text-center text-light" style="user-select:none;">Blocks</p>
+                        <div class="p-1" style="display:grid;  gap:5px;  grid-template-columns:repeat(3 , 1fr);">
+                            <img id="set_mode_block_1" src="{% static 'images/gui/block_1.svg' %}" width="100%" height="100%" />
+                            <img id="set_mode_block_2" src="{% static 'images/gui/block_2.svg' %}" width="100%" height="100%" />
+                            <img id="set_mode_block_3" src="{% static 'images/gui/block_3.svg' %}" width="100%" height="100%" />
+                            <img id="set_mode_block_4" src="{% static 'images/gui/block_4.svg' %}" width="100%" height="100%" />
+                            <img id="set_mode_block_5" src="{% static 'images/gui/block_5.svg' %}" width="100%" height="100%" />
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="fw-bolder m-0 text-center text-light" style="user-select:none;">Doors</p>
+                        <div class="p-1" style="display:grid;  gap:5px;  grid-template-columns:repeat(3 , 1fr);">
+                            <img id="set_mode_door_1" src="{% static 'images/gui/door_1.svg' %}" width="100%" height="100%" />
+                            <img id="set_mode_door_2" src="{% static 'images/gui/door_2.svg' %}" width="100%" height="100%" />
+                            <img id="set_mode_door_3" src="{% static 'images/gui/door_3.svg' %}" width="100%" height="100%" />
+                            <img id="set_mode_door_4" src="{% static 'images/gui/door_4.svg' %}" width="100%" height="100%" />
+                            <img id="set_mode_door_5" src="{% static 'images/gui/door_5.svg' %}" width="100%" height="100%" />
+                            <img id="set_mode_door_6" src="{% static 'images/gui/door_6.svg' %}" width="100%" height="100%" />
+                            <img id="set_mode_door_7" src="{% static 'images/gui/door_7.svg' %}" width="100%" height="100%" />
+                            <img id="set_mode_door_8" src="{% static 'images/gui/door_8.svg' %}" width="100%" height="100%" />
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="fw-bolder m-0 text-center text-light" style="user-select:none;">HVAC</p>
+                        <div class="p-1" style="display:grid;  gap:5px;  grid-template-columns:repeat(3 , 1fr);">
+                            <img id="set_mode_hvac_1" src="{% static 'images/gui/hvac.svg' %}" width="100%" height="100%" />
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="fw-bolder m-0 text-center text-light" style="user-select:none;">Lights</p>
+                        <div class="p-1" style="display:grid;  gap:5px;  grid-template-columns:repeat(3 , 1fr);">
+                            <img id="set_mode_light_1" src="{% static 'images/gui/light_1.svg' %}" width="100%" height="100%" />
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="fw-bolder m-0 text-center text-light" style="user-select:none;">Text</p>
+                        <div class="p-1" style="display:grid;  gap:5px;  grid-template-columns:repeat(3 , 1fr);">
+                            <img id="set_mode_text_1" src="{% static 'images/gui/text_1.svg' %}" width="100%" height="100%" />
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="fw-bolder m-0 text-center text-light" style="user-select:none;">Windows</p>
+                        <div class="p-1" style="display:grid;  gap:5px;  grid-template-columns:repeat(3 , 1fr);">
+                            <img id="set_mode_window_1" src="{% static 'images/gui/window_1.svg' %}" width="100%" height="100%" />
+                            <img id="set_mode_window_2" src="{% static 'images/gui/window_2.svg' %}" width="100%" height="100%" />
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <!-- canvas holder -->
+                <div class="bg-success border border-dark" id="canvas_holder" style="height:100%; overflow:auto; width:100%;"></div>
+
+
+
+
+
+
+                <!-- right panel-->
+                <div class="bg-secondary d-flex" style="flex-direction:column; height:100%; width:20%;">
+                    <!-- object buttons -->
+                    <div class="bg-dark mb-1 rounded" style="height:35%; overflow-y: auto; width:100%;">
+
+                        <!-- block buttons -->
+                        <table class="table table-dark table-hover table-striped" id="block_buttons_holder">
+                            <thead>
+                                <tr>
+                                    <th class="fw-normal m-0 p-0 w-50" style="user-select: none;">Blocks</th>
+                                    <th class="m-0 p-0 text-center w-50"><input type="checkbox" class="form-check-input" id="all_blocks_visible"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+
+                        <!-- door buttons -->
+                        <table class="table table-dark table-hover table-striped" id="door_buttons_holder">
+                            <thead>
+                                <tr>
+                                    <th class="fw-normal m-0 p-0 w-50" style="user-select: none;">Doors</th>
+                                    <th class="m-0 p-0 text-center w-50"><input type="checkbox" class="form-check-input" id="all_floors_visible"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+
+                        <!-- hvac buttons -->
+                        <table class="table table-dark table-hover table-striped" id="hvac_buttons_holder">
+                            <thead>
+                                <tr>
+                                    <th class="fw-normal m-0 p-0 w-50" style="user-select: none;">HVAC</th>
+                                    <th class="m-0 p-0 text-center w-50"><input type="checkbox" class="form-check-input" id="all_hvacs_visible"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+
+                        <!-- internal loads buttons -->
+                        <!--table class="table table-dark table-hover table-striped" id="internal_loads_holder">
+                            <thead>
+                                <tr>
+                                    <th class="fw-normal m-0 p-0 w-50" style="user-select: none;">Internal Loads</th>
+                                    <th class="m-0 p-0 text-center w-50"><input type="checkbox" class="form-check-input" id="all_floors_visible"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table-->
+
+
+
+                        <!-- light buttons -->
+                        <table class="table table-dark table-hover table-striped" id="light_buttons_holder">
+                            <thead>
+                                <tr>
+                                    <th class="fw-normal m-0 p-0 w-50" style="user-select: none;">Lights</th>
+                                    <th class="m-0 p-0 text-center w-50"><input type="checkbox" class="form-check-input" id="all_lights_visible"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+
+                        <!-- text buttons -->
+                        <table class="table table-dark table-hover table-striped" id="text_buttons_holder">
+                            <thead>
+                                <tr>
+                                    <th class="fw-normal m-0 p-0 w-50" style="user-select: none;">Texts</th>
+                                    <th class="m-0 p-0 text-center w-50"><input type="checkbox" class="form-check-input" id="all_texts_visible"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+
+                        <!-- wall buttons -->
+                        <table class="table table-dark table-hover table-striped" id="wall_buttons_holder">
+                            <thead>
+                                <tr class="px-2">
+                                    <th class="fw-normal m-0 p-0 w-50" style="user-select: none;">Walls</th>
+                                    <th class="m-0 p-0 text-center w-50"><input type="checkbox" class="form-check-input" id="all_walls_visible"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        
+
+                        <!-- window buttons -->
+                        <table class="table table-dark table-hover table-striped" id="window_buttons_holder">
+                            <thead>
+                                <tr>
+                                    <th class="fw-normal m-0 p-0 w-50" style="user-select: none;">Windows</th>
+                                    <th class="m-0 p-0 text-center w-50"><input type="checkbox" class="form-check-input" id="all_windows_visible"></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    
+                    
+                    
+                    <!-- editors -->
+                    <div class="bg-dark rounded" style="height:calc(100% - 35%);  overflow-y:auto;  width:100%;">
+                        {% include "editor/includes/editor/block.html" %}
+                        {% include "editor/includes/editor/door.html" %}
+                        {% include "editor/includes/editor/hvac.html" %}
+                        {% include "editor/includes/editor/light.html" %}
+                        {% include "editor/includes/editor/text.html" %}
+                        {% include "editor/includes/editor/window.html" %}
+
+
+
+
+
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- toast object to show messages for a certain amount of time -->
+            <div class="" id="toast" style="bottom:5px; display:none; left:50%; position:absolute; transform:translateX(-50%);"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </main>
+        
+
+
+
+
+    </body>
+</html>

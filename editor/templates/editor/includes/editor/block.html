@@ -1,0 +1,562 @@
+{% load static %}
+<div class="container-fluid py-2" id="block_editor" style="display:none;">
+
+
+    <!-- type -->
+    <div class="mb-2">
+        <label for="type" class="form-label text-light" style="user-select:none;">Type</label>
+        <input class="form-control" id="type" type="text" value="Block" readonly>
+    </div>
+
+    
+    <!-- name -->
+    <div class="mb-2">
+        <label for="name" class="form-label text-light" style="user-select:none;">Name</label>
+        <input class="form-control" id="name" type="text">
+    </div>
+
+    
+    <!-- visible -->
+    <div class="mb-4 form-check">
+        <input type="checkbox" class="form-check-input" id="visible">
+        <label class="form-check-label text-light" for="visible" style="user-select:none;">Visible</label>
+    </div>
+    
+
+    
+    <!-- walls availability -->
+    <p class="m-0 text-center text-light">Walls</p>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="east_wall">
+        <label class="form-check-label text-light" for="east_wall" style="user-select:none;">East Wall</label>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="west_wall">
+        <label class="form-check-label text-light" for="west_wall" style="user-select:none;">West Wall</label>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="north_wall">
+        <label class="form-check-label text-light" for="north_wall" style="user-select:none;">North Wall</label>
+    </div>
+    <div class="mb-4 form-check">
+        <input type="checkbox" class="form-check-input" id="south_wall">
+        <label class="form-check-label text-light" for="south_wall" style="user-select:none;">South Wall</label>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- floor material -->
+    <hr class="text-light"/>
+    <p class="mb-0 mt-4 text-center text-light" style="user-select:none;">Floor Material</p>
+    <div class="mb-2">
+        <label for="floor_layer_1" class="form-label text-light" style="user-select:none;">Layer 1</label>
+        <select class="form-select" id="floor_layer_1">
+            <option value="Ceramic Tiles">Ceramic Tiles</option>
+            <option value="Granite">Granite</option>
+            <option value="Hardwood">Hardwood</option>
+            <option value="Marble">Marble</option>
+            <option value="Polished Concrete">Polished Concrete</option>
+            <option value="Porcelain Tiles">Porcelain Tiles</option>
+            <option value="PVC/Vinyl Tiles">PVC/Vinyl Tiles</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="floor_layer_2" class="form-label text-light" style="user-select:none;">Layer 2</label>
+        <select class="form-select" id="floor_layer_2">
+            <option value=""></option>
+            <option value="Ceramic Tiles">Ceramic Tiles</option>
+            <option value="Granite">Granite</option>
+            <option value="Hardwood">Hardwood</option>
+            <option value="Marble">Marble</option>
+            <option value="Polished Concrete">Polished Concrete</option>
+            <option value="Porcelain Tiles">Porcelain Tiles</option>
+            <option value="PVC/Vinyl Tiles">PVC/Vinyl Tiles</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="floor_layer_3" class="form-label text-light" style="user-select:none;">Layer 3</label>
+        <select class="form-select" id="floor_layer_3">
+            <option value=""></option>
+            <option value="Ceramic Tiles">Ceramic Tiles</option>
+            <option value="Granite">Granite</option>
+            <option value="Hardwood">Hardwood</option>
+            <option value="Marble">Marble</option>
+            <option value="Polished Concrete">Polished Concrete</option>
+            <option value="Porcelain Tiles">Porcelain Tiles</option>
+            <option value="PVC/Vinyl Tiles">PVC/Vinyl Tiles</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="floor_layer_4" class="form-label text-light" style="user-select:none;">Layer 4</label>
+        <select class="form-select" id="floor_layer_4">
+            <option value=""></option>
+            <option value="Ceramic Tiles">Ceramic Tiles</option>
+            <option value="Granite">Granite</option>
+            <option value="Hardwood">Hardwood</option>
+            <option value="Marble">Marble</option>
+            <option value="Polished Concrete">Polished Concrete</option>
+            <option value="Porcelain Tiles">Porcelain Tiles</option>
+            <option value="PVC/Vinyl Tiles">PVC/Vinyl Tiles</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="floor_layer_5" class="form-label text-light" style="user-select:none;">Layer 5</label>
+        <select class="form-select" id="floor_layer_5">
+            <option value=""></option>
+            <option value="Ceramic Tiles">Ceramic Tiles</option>
+            <option value="Granite">Granite</option>
+            <option value="Hardwood">Hardwood</option>
+            <option value="Marble">Marble</option>
+            <option value="Polished Concrete">Polished Concrete</option>
+            <option value="Porcelain Tiles">Porcelain Tiles</option>
+            <option value="PVC/Vinyl Tiles">PVC/Vinyl Tiles</option>
+        </select>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- global exterior walls material -->
+    <hr class="text-light"/>
+    <p class="mb-0 mt-4 text-center text-light" style="user-select:none;">Exterior Walls Material</p>
+    <div class="mb-2">
+        <label for="exterior_wall_layer_1" class="form-label text-light" style="user-select:none;">Layer 1</label>
+        <select class="form-select" id="exterior_wall_layer_1">
+            <!-- WALL EXTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="White Plaster">White Plaster</option>
+            <option value="Grey Cement Plaster">Grey Cement Plaster</option>
+            <option value="Red Clay Face Brick">Red Clay Face Brick</option>
+            <option value="White Glazed Tile">White Glazed Tile</option>
+            <option value="Aluminum Cladding">Aluminum Cladding</option>
+
+            <!-- WALL INSULATION MATERIALS -->
+            <hr/>
+            <option value="EPS (Polystyrene)">EPS (Polystyrene)</option>
+            <option value="Glass Wool">Glass Wool</option>
+            <option value="Polyurethane Foam">Polyurethane Foam</option>
+
+            <!-- WALL STRUCTURAL MASH MATERIALS -->
+            <hr/>
+            <option value="Cement Block">Cement Block</option>
+            <option value="Clay Brick">Clay Brick</option>
+            <option value="Concrete Block">Concrete Block</option>
+
+            <!-- WALL INTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="Cement-Sand Plaster">Cement-Sand Plaster</option>
+            <option value="Ceramic Tile">Ceramic Tile</option>
+            <option value="Gypsum Plaster">Gypsum Plaster</option>
+            <option value="Plasterboard (Drywall)">Plasterboard (Drywall)</option>
+            <option value="Wood Paneling (Pine)">Wood Paneling (Pine)</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="exterior_wall_layer_2" class="form-label text-light" style="user-select:none;">Layer 2</label>
+        <select class="form-select" id="exterior_wall_layer_2">
+            <option value=""></option>
+
+            <!-- WALL EXTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="White Plaster">White Plaster</option>
+            <option value="Grey Cement Plaster">Grey Cement Plaster</option>
+            <option value="Red Clay Face Brick">Red Clay Face Brick</option>
+            <option value="White Glazed Tile">White Glazed Tile</option>
+            <option value="Aluminum Cladding">Aluminum Cladding</option>
+
+            <!-- WALL INSULATION MATERIALS -->
+            <hr/>
+            <option value="EPS (Polystyrene)">EPS (Polystyrene)</option>
+            <option value="Glass Wool">Glass Wool</option>
+            <option value="Polyurethane Foam">Polyurethane Foam</option>
+
+            <!-- WALL STRUCTURAL MASH MATERIALS -->
+            <hr/>
+            <option value="Cement Block">Cement Block</option>
+            <option value="Clay Brick">Clay Brick</option>
+            <option value="Concrete Block">Concrete Block</option>
+
+            <!-- WALL INTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="Cement-Sand Plaster">Cement-Sand Plaster</option>
+            <option value="Ceramic Tile">Ceramic Tile</option>
+            <option value="Gypsum Plaster">Gypsum Plaster</option>
+            <option value="Plasterboard (Drywall)">Plasterboard (Drywall)</option>
+            <option value="Wood Paneling (Pine)">Wood Paneling (Pine)</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="exterior_wall_layer_3" class="form-label text-light" style="user-select:none;">Layer 3</label>
+        <select class="form-select" id="exterior_wall_layer_3">
+            <option value=""></option>
+
+            <!-- WALL EXTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="White Plaster">White Plaster</option>
+            <option value="Grey Cement Plaster">Grey Cement Plaster</option>
+            <option value="Red Clay Face Brick">Red Clay Face Brick</option>
+            <option value="White Glazed Tile">White Glazed Tile</option>
+            <option value="Aluminum Cladding">Aluminum Cladding</option>
+
+            <!-- WALL INSULATION MATERIALS -->
+            <hr/>
+            <option value="EPS (Polystyrene)">EPS (Polystyrene)</option>
+            <option value="Glass Wool">Glass Wool</option>
+            <option value="Polyurethane Foam">Polyurethane Foam</option>
+
+            <!-- WALL STRUCTURAL MASH MATERIALS -->
+            <hr/>
+            <option value="Cement Block">Cement Block</option>
+            <option value="Clay Brick">Clay Brick</option>
+            <option value="Concrete Block">Concrete Block</option>
+
+            <!-- WALL INTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="Cement-Sand Plaster">Cement-Sand Plaster</option>
+            <option value="Ceramic Tile">Ceramic Tile</option>
+            <option value="Gypsum Plaster">Gypsum Plaster</option>
+            <option value="Plasterboard (Drywall)">Plasterboard (Drywall)</option>
+            <option value="Wood Paneling (Pine)">Wood Paneling (Pine)</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="exterior_wall_layer_4" class="form-label text-light" style="user-select:none;">Layer 4</label>
+        <select class="form-select" id="exterior_wall_layer_4">
+            <option value=""></option>
+
+            <!-- WALL EXTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="White Plaster">White Plaster</option>
+            <option value="Grey Cement Plaster">Grey Cement Plaster</option>
+            <option value="Red Clay Face Brick">Red Clay Face Brick</option>
+            <option value="White Glazed Tile">White Glazed Tile</option>
+            <option value="Aluminum Cladding">Aluminum Cladding</option>
+
+            <!-- WALL INSULATION MATERIALS -->
+            <hr/>
+            <option value="EPS (Polystyrene)">EPS (Polystyrene)</option>
+            <option value="Glass Wool">Glass Wool</option>
+            <option value="Polyurethane Foam">Polyurethane Foam</option>
+
+            <!-- WALL STRUCTURAL MASH MATERIALS -->
+            <hr/>
+            <option value="Cement Block">Cement Block</option>
+            <option value="Clay Brick">Clay Brick</option>
+            <option value="Concrete Block">Concrete Block</option>
+
+            <!-- WALL INTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="Cement-Sand Plaster">Cement-Sand Plaster</option>
+            <option value="Ceramic Tile">Ceramic Tile</option>
+            <option value="Gypsum Plaster">Gypsum Plaster</option>
+            <option value="Plasterboard (Drywall)">Plasterboard (Drywall)</option>
+            <option value="Wood Paneling (Pine)">Wood Paneling (Pine)</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="exterior_wall_layer_5" class="form-label text-light" style="user-select:none;">Layer 5</label>
+        <select class="form-select" id="exterior_wall_layer_5">
+            <option value=""></option>
+
+            <!-- WALL EXTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="White Plaster">White Plaster</option>
+            <option value="Grey Cement Plaster">Grey Cement Plaster</option>
+            <option value="Red Clay Face Brick">Red Clay Face Brick</option>
+            <option value="White Glazed Tile">White Glazed Tile</option>
+            <option value="Aluminum Cladding">Aluminum Cladding</option>
+
+            <!-- WALL INSULATION MATERIALS -->
+            <hr/>
+            <option value="EPS (Polystyrene)">EPS (Polystyrene)</option>
+            <option value="Glass Wool">Glass Wool</option>
+            <option value="Polyurethane Foam">Polyurethane Foam</option>
+
+            <!-- WALL STRUCTURAL MASH MATERIALS -->
+            <hr/>
+            <option value="Cement Block">Cement Block</option>
+            <option value="Clay Brick">Clay Brick</option>
+            <option value="Concrete Block">Concrete Block</option>
+
+            <!-- WALL INTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="Cement-Sand Plaster">Cement-Sand Plaster</option>
+            <option value="Ceramic Tile">Ceramic Tile</option>
+            <option value="Gypsum Plaster">Gypsum Plaster</option>
+            <option value="Plasterboard (Drywall)">Plasterboard (Drywall)</option>
+            <option value="Wood Paneling (Pine)">Wood Paneling (Pine)</option>
+        </select>
+    </div>
+
+
+
+
+
+
+
+    <!-- global interior walls material -->
+    <hr class="text-light"/>
+    <p class="mb-0 mt-4 text-center text-light" style="user-select:none;">Interior Walls Material</p>
+    <div class="mb-2">
+        <label for="interior_wall_layer_1" class="form-label text-light" style="user-select:none;">Layer 1</label>
+        <select class="form-select" id="interior_wall_layer_1">
+            <!-- WALL EXTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="White Plaster">White Plaster</option>
+            <option value="Grey Cement Plaster">Grey Cement Plaster</option>
+            <option value="Red Clay Face Brick">Red Clay Face Brick</option>
+            <option value="White Glazed Tile">White Glazed Tile</option>
+            <option value="Aluminum Cladding">Aluminum Cladding</option>
+
+            <!-- WALL INSULATION MATERIALS -->
+            <hr/>
+            <option value="EPS (Polystyrene)">EPS (Polystyrene)</option>
+            <option value="Glass Wool">Glass Wool</option>
+            <option value="Polyurethane Foam">Polyurethane Foam</option>
+
+            <!-- WALL STRUCTURAL MASH MATERIALS -->
+            <hr/>
+            <option value="Cement Block">Cement Block</option>
+            <option value="Clay Brick">Clay Brick</option>
+            <option value="Concrete Block">Concrete Block</option>
+
+            <!-- WALL INTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="Cement-Sand Plaster">Cement-Sand Plaster</option>
+            <option value="Ceramic Tile">Ceramic Tile</option>
+            <option value="Gypsum Plaster">Gypsum Plaster</option>
+            <option value="Plasterboard (Drywall)">Plasterboard (Drywall)</option>
+            <option value="Wood Paneling (Pine)">Wood Paneling (Pine)</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="interior_wall_layer_2" class="form-label text-light" style="user-select:none;">Layer 2</label>
+        <select class="form-select" id="interior_wall_layer_2">
+            <option value=""></option>
+
+            <!-- WALL EXTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="White Plaster">White Plaster</option>
+            <option value="Grey Cement Plaster">Grey Cement Plaster</option>
+            <option value="Red Clay Face Brick">Red Clay Face Brick</option>
+            <option value="White Glazed Tile">White Glazed Tile</option>
+            <option value="Aluminum Cladding">Aluminum Cladding</option>
+
+            <!-- WALL INSULATION MATERIALS -->
+            <hr/>
+            <option value="EPS (Polystyrene)">EPS (Polystyrene)</option>
+            <option value="Glass Wool">Glass Wool</option>
+            <option value="Polyurethane Foam">Polyurethane Foam</option>
+
+            <!-- WALL STRUCTURAL MASH MATERIALS -->
+            <hr/>
+            <option value="Cement Block">Cement Block</option>
+            <option value="Clay Brick">Clay Brick</option>
+            <option value="Concrete Block">Concrete Block</option>
+
+            <!-- WALL INTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="Cement-Sand Plaster">Cement-Sand Plaster</option>
+            <option value="Ceramic Tile">Ceramic Tile</option>
+            <option value="Gypsum Plaster">Gypsum Plaster</option>
+            <option value="Plasterboard (Drywall)">Plasterboard (Drywall)</option>
+            <option value="Wood Paneling (Pine)">Wood Paneling (Pine)</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="interior_wall_layer_3" class="form-label text-light" style="user-select:none;">Layer 3</label>
+        <select class="form-select" id="interior_wall_layer_3">
+            <option value=""></option>
+
+            <!-- WALL EXTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="White Plaster">White Plaster</option>
+            <option value="Grey Cement Plaster">Grey Cement Plaster</option>
+            <option value="Red Clay Face Brick">Red Clay Face Brick</option>
+            <option value="White Glazed Tile">White Glazed Tile</option>
+            <option value="Aluminum Cladding">Aluminum Cladding</option>
+
+            <!-- WALL INSULATION MATERIALS -->
+            <hr/>
+            <option value="EPS (Polystyrene)">EPS (Polystyrene)</option>
+            <option value="Glass Wool">Glass Wool</option>
+            <option value="Polyurethane Foam">Polyurethane Foam</option>
+
+            <!-- WALL STRUCTURAL MASH MATERIALS -->
+            <hr/>
+            <option value="Cement Block">Cement Block</option>
+            <option value="Clay Brick">Clay Brick</option>
+            <option value="Concrete Block">Concrete Block</option>
+
+            <!-- WALL INTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="Cement-Sand Plaster">Cement-Sand Plaster</option>
+            <option value="Ceramic Tile">Ceramic Tile</option>
+            <option value="Gypsum Plaster">Gypsum Plaster</option>
+            <option value="Plasterboard (Drywall)">Plasterboard (Drywall)</option>
+            <option value="Wood Paneling (Pine)">Wood Paneling (Pine)</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="interior_wall_layer_4" class="form-label text-light" style="user-select:none;">Layer 4</label>
+        <select class="form-select" id="interior_wall_layer_4">
+            <option value=""></option>
+
+            <!-- WALL EXTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="White Plaster">White Plaster</option>
+            <option value="Grey Cement Plaster">Grey Cement Plaster</option>
+            <option value="Red Clay Face Brick">Red Clay Face Brick</option>
+            <option value="White Glazed Tile">White Glazed Tile</option>
+            <option value="Aluminum Cladding">Aluminum Cladding</option>
+
+            <!-- WALL INSULATION MATERIALS -->
+            <hr/>
+            <option value="EPS (Polystyrene)">EPS (Polystyrene)</option>
+            <option value="Glass Wool">Glass Wool</option>
+            <option value="Polyurethane Foam">Polyurethane Foam</option>
+
+            <!-- WALL STRUCTURAL MASH MATERIALS -->
+            <hr/>
+            <option value="Cement Block">Cement Block</option>
+            <option value="Clay Brick">Clay Brick</option>
+            <option value="Concrete Block">Concrete Block</option>
+
+            <!-- WALL INTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="Cement-Sand Plaster">Cement-Sand Plaster</option>
+            <option value="Ceramic Tile">Ceramic Tile</option>
+            <option value="Gypsum Plaster">Gypsum Plaster</option>
+            <option value="Plasterboard (Drywall)">Plasterboard (Drywall)</option>
+            <option value="Wood Paneling (Pine)">Wood Paneling (Pine)</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="interior_wall_layer_5" class="form-label text-light" style="user-select:none;">Layer 5</label>
+        <select class="form-select" id="interior_wall_layer_5">
+            <option value=""></option>
+
+            <!-- WALL EXTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="White Plaster">White Plaster</option>
+            <option value="Grey Cement Plaster">Grey Cement Plaster</option>
+            <option value="Red Clay Face Brick">Red Clay Face Brick</option>
+            <option value="White Glazed Tile">White Glazed Tile</option>
+            <option value="Aluminum Cladding">Aluminum Cladding</option>
+
+            <!-- WALL INSULATION MATERIALS -->
+            <hr/>
+            <option value="EPS (Polystyrene)">EPS (Polystyrene)</option>
+            <option value="Glass Wool">Glass Wool</option>
+            <option value="Polyurethane Foam">Polyurethane Foam</option>
+
+            <!-- WALL STRUCTURAL MASH MATERIALS -->
+            <hr/>
+            <option value="Cement Block">Cement Block</option>
+            <option value="Clay Brick">Clay Brick</option>
+            <option value="Concrete Block">Concrete Block</option>
+
+            <!-- WALL INTERIOR FINISH MATERIALS -->
+            <hr/>
+            <option value="Cement-Sand Plaster">Cement-Sand Plaster</option>
+            <option value="Ceramic Tile">Ceramic Tile</option>
+            <option value="Gypsum Plaster">Gypsum Plaster</option>
+            <option value="Plasterboard (Drywall)">Plasterboard (Drywall)</option>
+            <option value="Wood Paneling (Pine)">Wood Paneling (Pine)</option>
+        </select>
+    </div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <!-- global roof material -->
+    <hr class="text-light"/>
+    <p class="mb-0 mt-4 text-center text-light" style="user-select:none;">Roof Material</p>
+    <div class="mb-2">
+        <label for="roof_layer_1" class="form-label text-light" style="user-select:none;">Layer 1</label>
+        <select class="form-select" id="roof_layer_1">
+            <option value="Corrugated Iron Sheets">Corrugated Iron Sheets</option>
+            <option value="Aluminum Roofing Sheets">Aluminum Roofing Sheets</option>
+            <option value="Concrete Roof Tiles">Concrete Roof Tiles</option>
+            <option value="Steel Roofing Tiles">Steel Roofing Tiles</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="roof_layer_2" class="form-label text-light" style="user-select:none;">Layer 2</label>
+        <select class="form-select" id="roof_layer_2">
+            <option value=""></option>
+            <option value="Corrugated Iron Sheets">Corrugated Iron Sheets</option>
+            <option value="Aluminum Roofing Sheets">Aluminum Roofing Sheets</option>
+            <option value="Concrete Roof Tiles">Concrete Roof Tiles</option>
+            <option value="Steel Roofing Tiles">Steel Roofing Tiles</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="roof_layer_3" class="form-label text-light" style="user-select:none;">Layer 3</label>
+        <select class="form-select" id="roof_layer_3">
+            <option value=""></option>
+            <option value="Corrugated Iron Sheets">Corrugated Iron Sheets</option>
+            <option value="Aluminum Roofing Sheets">Aluminum Roofing Sheets</option>
+            <option value="Concrete Roof Tiles">Concrete Roof Tiles</option>
+            <option value="Steel Roofing Tiles">Steel Roofing Tiles</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="roof_layer_4" class="form-label text-light" style="user-select:none;">Layer 4</label>
+        <select class="form-select" id="roof_layer_4">
+            <option value=""></option>
+            <option value="Corrugated Iron Sheets">Corrugated Iron Sheets</option>
+            <option value="Aluminum Roofing Sheets">Aluminum Roofing Sheets</option>
+            <option value="Concrete Roof Tiles">Concrete Roof Tiles</option>
+            <option value="Steel Roofing Tiles">Steel Roofing Tiles</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="roof_layer_5" class="form-label text-light" style="user-select:none;">Layer 5</label>
+        <select class="form-select" id="roof_layer_5">
+            <option value=""></option>
+            <option value="Corrugated Iron Sheets">Corrugated Iron Sheets</option>
+            <option value="Aluminum Roofing Sheets">Aluminum Roofing Sheets</option>
+            <option value="Concrete Roof Tiles">Concrete Roof Tiles</option>
+            <option value="Steel Roofing Tiles">Steel Roofing Tiles</option>
+        </select>
+    </div>
+
+
+
+
+
+
+
+    
+    <!-- delete button -->
+    <button class="btn btn-sm btn-danger" id="delete_block_btn">Delete Block</button>
+
+
+</div>

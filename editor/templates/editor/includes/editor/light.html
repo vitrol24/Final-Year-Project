@@ -1,0 +1,49 @@
+{% load static %}
+<div class="container-fluid py-2" id="light_editor" style="display:none;">
+
+    <!-- type -->
+    <div class="mb-2">
+        <label for="type" class="form-label text-light" style="user-select:none;">Type</label>
+        <input class="form-control" id="type" type="text" value="Text" readonly>
+    </div>
+
+    
+    <!-- name -->
+    <div class="mb-2">
+        <label for="name" class="form-label text-light" style="user-select:none;">Name</label>
+        <input class="form-control" id="name" type="text">
+    </div>
+
+    
+    <!-- visible -->
+    <div class="mb-4 form-check">
+        <input type="checkbox" class="form-check-input" id="visible">
+        <label class="form-check-label text-light" for="visible" style="user-select:none;">Visible</label>
+    </div>
+
+
+    <!-- wattage -->
+    <div class="mb-2">
+        <label for="watts" class="form-label text-light" style="user-select:none;">Watts</label>
+        <input class="form-control" id="watts" type="number">
+    </div>
+
+
+
+    <!-- schedule -->
+    <hr class="text-light" />
+    <p class="mb-0 text-center text-light">Schedule</p>
+    <div class="mb-2">
+        <label for="on_time" class="form-label text-light" style="user-select:none;">On Time</label>
+        <input class="form-control" id="on_time" type="time">
+    </div>
+    <div class="mb-2">
+        <label for="off_time" class="form-label text-light" style="user-select:none;">Off Time</label>
+        <input class="form-control" id="off_time" type="time">
+    </div>
+
+    
+    
+    <!-- delete button -->
+    <button class="btn btn-sm btn-danger" id="delete_btn">Delete Light</button>
+</div>

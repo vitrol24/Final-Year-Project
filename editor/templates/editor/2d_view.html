@@ -1,0 +1,389 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="charset" content="utf-8">
+        <title>ZEDT - 2D View</title>
+        <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+        <link rel="stylesheet" href="{% static 'bootstrap-5.3.3/css/bootstrap.min.css' %}">
+        <script src="{% static 'bootstrap-5.3.3/js/bootstrap.bundle.min.js' %}"></script>
+
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "PIXI": "{% static 'libs/pixi.min.mjs' %}",
+                    "THREE" : "{% static 'libs/three/three.module.min.js' %}",
+                    "OrbitControls": "{% static 'three/OrbitControls.js' %}",
+
+                    "functions": "{% static 'scripts/functions.js' %}",
+                    "values": "{% static 'scripts/values.js' %}"
+                }
+            }
+        </script>
+        
+
+
+
+        <!-- put project data inside script tag with id projet_data -->
+        <p class="d-none" id="project_uuid">{{project.uuid}}</p>
+        {{project.data|json_script:"project_data"}}
+        
+        
+
+    </head>
+    <body class="bg-light" style="margin:0px; overflow: hidden; padding: 0px;">
+
+
+
+        <header class="bg-dark rounded shadow" style="position:absolute; left:50%; top:5px; transform:translateX(-50%);  z-index:1000;">
+            <!-- top menu -->
+            <div class="btn-group px-2 py-2">
+                <a class="btn btn-secondary btn-sm" href="{% url 'user:dashboard' %}">Dashboard</a>
+                <a class="btn btn-secondary btn-sm" href="{% url 'user:project_details' project.uuid %}">Details</a>
+                <a class="btn btn-secondary btn-sm"  href="{% url 'editor:index' project.uuid %}">Edit</a>
+                <!--button class="btn btn-secondary btn-sm" id="save_btn" disabled>Save</button-->
+                <!--button class="btn btn-secondary btn-sm" id="download_btn" disabled>Download</button-->
+                <a class="btn btn-secondary btn-sm"  href="{% url 'editor:2d_view' project.uuid %}">2D View</a>
+                <!--a class="btn btn-secondary btn-sm"  href="{% url 'editor:3d_view' project.uuid %}">3D View</a-->
+            </div>
+        </header>
+
+
+
+
+
+
+        <main class="d-flex" style="flex-direction:column;">
+
+            <!-- load some texures used for the floor -->
+            <img id="ceramic_tiles_texture" src="{% static 'images/floor/tiles.jpg' %}" style="display:none;">
+            <img id="granite_texture" src="{% static 'images/floor/granite.jpg' %}" style="display:none;">
+            <img id="hardwood_texture" src="{% static 'images/floor/wood 2.jpg' %}" style="display:none;">
+            <img id="marble_texture" src="{% static 'images/floor/marble.jpg' %}" style="display:none;">
+            <img id="polished_concrete_texture" src="{% static 'images/floor/concrete.jpg' %}" style="display:none;">
+            <img id="porcelain_tiles_texture" src="{% static 'images/floor/tiles.jpg' %}" style="display:none;">
+            <img id="pvc_tiles_texture" src="{% static 'images/floor/tiles.jpg' %}" style="display:none;">
+
+            <!-- canvas holder -->
+            <div class="bg-success" id="canvas_holder" style="height:100%; overflow:auto; position:fixed; width:100%;"></div>
+
+
+            <script type="module">
+                import * as PIXI from "PIXI";
+
+                import * as values from "values";
+
+
+                // LOAD PROJECT DATA
+                let DATA;
+                let project_data = JSON.parse(document.getElementById("project_data").innerHTML);
+                if(project_data != undefined){
+                    DATA = project_data;
+                }
+
+
+
+                // THICKNESSES OF GRAPHICS OBJECTS
+                let BLOCK_THICKNESS = 5;
+                let DOOR_THICKNESS = 8;
+                let WINDOW_THICKNESS = 8;
+
+
+
+                // HTML DOM ELEMNTS
+                let CANVAS_HOLDER = document.querySelector("#canvas_holder");
+                
+                // PIXI APP
+                let PIXI_APP = new PIXI.Application();
+                await PIXI_APP.init({
+                    width:1500,
+                    height:1500
+                });
+                CANVAS_HOLDER.appendChild(PIXI_APP.canvas);
+
+
+
+                function draw_bg(){
+                    let BG = new PIXI.Graphics();
+                    PIXI_APP.stage.addChild(BG);
+                    BG.rect(0 , 0 , PIXI_APP.screen.width , PIXI_APP.screen.height).fill("#ffffff");
+                    /*for(let x = 0; x < PIXI_APP.screen.width; x+=values.UNIT){
+                        for(let y = 0; y < PIXI_APP.screen.height; y+=values.UNIT){
+                            BG.rect(x , y , 1 , 1);
+                        }
+                    }
+                    BG.fill({color:"#000000"});*/
+
+                }
+                draw_bg();
+
+
+
+
+
+                // DRAW BLOCKS
+                function draw_blocks(){
+                    for(let block_data of DATA.blocks.objects){
+
+                        let block = new PIXI.Graphics();
+                        PIXI_APP.stage.addChild(block);
+                        block.id = block_data.id;
+                        block.visible = block_data.visible;
+
+
+                        if(block_data.east_wall_available == true){
+                            block.moveTo(block_data.top_right.x*values.UNIT, block_data.top_right.y*values.UNIT).lineTo(block_data.bottom_right.x*values.UNIT, block_data.bottom_right.y*values.UNIT);
+                        }
+                        if(block_data.west_wall_available){
+                            block.moveTo(block_data.top_left.x*values.UNIT, block_data.top_left.y*values.UNIT).lineTo(block_data.bottom_left.x*values.UNIT, block_data.bottom_left.y*values.UNIT);
+                        }
+                        if(block_data.north_wall_available){
+                            block.moveTo(block_data.top_left.x*values.UNIT, block_data.top_left.y*values.UNIT).lineTo(block_data.top_right.x*values.UNIT, block_data.top_right.y*values.UNIT);
+                        }
+                        if(block_data.south_wall_available){
+                            block.moveTo(block_data.bottom_left.x*values.UNIT, block_data.bottom_left.y*values.UNIT).lineTo(block_data.bottom_right.x*values.UNIT, block_data.bottom_right.y*values.UNIT);
+                        }
+                        block.stroke({color:"#30465C", width:BLOCK_THICKNESS});
+                    }
+                }
+                draw_blocks();
+
+
+
+                // DRAW DOORS
+                function draw_doors(){
+                    for(let door_data of DATA.doors){
+                        let door = new PIXI.Graphics();
+                        PIXI_APP.stage.addChild(door);
+                        door.id = door_data.id;
+                        door.visible = door_data.visible;
+
+
+                        if(door_data.type == "door 1"){
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo((door_data.x+2)*values.UNIT, door_data.y*values.UNIT);
+                            door.stroke({color:"#ffffff", width:BLOCK_THICKNESS});
+
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo(door_data.x*values.UNIT, (door_data.y-2)*values.UNIT);
+                            door.stroke({color:"#7e3707", width:5});
+                            door.arc(door_data.x*values.UNIT, door_data.y*values.UNIT, 2*values.UNIT, Math.PI*1.5, 0);
+                            door.stroke({color:"#000000", width:1});
+                        
+                        }else if(door_data.type == "door 2"){
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo((door_data.x+2)*values.UNIT, door_data.y*values.UNIT);
+                            door.stroke({color:"#ffffff", width:BLOCK_THICKNESS});
+
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo(door_data.x*values.UNIT, (door_data.y+2)*values.UNIT);
+                            door.stroke({color:"#7e3707", width:5});
+                            door.arc(door_data.x*values.UNIT, door_data.y*values.UNIT, 2*values.UNIT, Math.PI/2 ,0, true);
+                            door.stroke({color:"#000000", pixelLine:true});
+
+                        }else if(door_data.type == "door 3"){
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo((door_data.x-2)*values.UNIT, door_data.y*values.UNIT);
+                            door.stroke({color:"#ffffff", width:BLOCK_THICKNESS});
+
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo(door_data.x*values.UNIT, (door_data.y-2)*values.UNIT);
+                            door.stroke({color:"#7e3707", width:5});
+                            door.arc(door_data.x*values.UNIT, door_data.y*values.UNIT, 2*values.UNIT, Math.PI*1.5, Math.PI, true);
+                            door.stroke({color:"#000000", pixelLine:true})
+
+                        }else if(door_data.type == "door 4"){
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo((door_data.x-2)*values.UNIT, door_data.y*values.UNIT);
+                            door.stroke({color:"#ffffff", width:BLOCK_THICKNESS});
+
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo(door_data.x*values.UNIT, (door_data.y+2)*values.UNIT);
+                            door.stroke({color:"#7e3707", width:5});
+                            door.arc(door_data.x*values.UNIT, door_data.y*values.UNIT, 2*values.UNIT, Math.PI/2, Math.PI);
+                            door.stroke({color:"#000000", pixelLine:true});
+                        }else if(door_data.type == "door 5"){
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo(door_data.x*values.UNIT, (door_data.y-2)*values.UNIT);
+                            door.stroke({color:"#ffffff", width:BLOCK_THICKNESS});
+
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo((door_data.x+2)*values.UNIT, door_data.y*values.UNIT);
+                            door.stroke({color:"#7e3707", width:5});
+                            door.arc(door_data.x*values.UNIT, door_data.y*values.UNIT, 2*values.UNIT, 0, Math.PI*1.5, true);
+                            door.stroke({color:"#000000", pixelLine:true});
+                        }else if(door_data.type == "door 6"){        
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo(door_data.x*values.UNIT, (door_data.y-2)*values.UNIT);
+                            door.stroke({color:"#ffffff", width:BLOCK_THICKNESS});
+
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo((door_data.x-2)*values.UNIT, door_data.y*values.UNIT);
+                            door.stroke({color:"#7e3707", width:5});
+                            door.arc(door_data.x*values.UNIT, door_data.y*values.UNIT, 2*values.UNIT, Math.PI, Math.PI*1.5);
+                            door.stroke({color:"#000000", width:1})
+                        }else if(door_data.type == "door 7"){
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo(door_data.x*values.UNIT, (door_data.y+2)*values.UNIT);
+                            door.stroke({color:"#ffffff", width:BLOCK_THICKNESS});
+
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo((door_data.x-2)*values.UNIT, door_data.y*values.UNIT);
+                            door.stroke({color:"#7e3707", width:5});
+                            door.arc(door_data.x*values.UNIT, door_data.y*values.UNIT, 2*values.UNIT, Math.PI, Math.PI/2, true);
+                            door.stroke({color:"#000000", width:1})                
+                        }else if(door_data.type == "door 8"){
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo(door_data.x*values.UNIT, (door_data.y+2)*values.UNIT);
+                            door.stroke({color:"#ffffff", width:BLOCK_THICKNESS});
+
+                            door.moveTo(door_data.x*values.UNIT, door_data.y*values.UNIT);
+                            door.lineTo((door_data.x+2)*values.UNIT, door_data.y*values.UNIT);
+                            door.stroke({color:"#7e3707", width:5});
+                            door.arc(door_data.x*values.UNIT, door_data.y*values.UNIT, 2*values.UNIT, 0, Math.PI/2);
+                            door.stroke({color:"#000000", pixelLine:true});
+                        }
+
+                    }
+                }
+                draw_doors();
+
+
+
+                // DRAW WINDOWS
+                function draw_windows(){
+                    for(let window_data of DATA.windows){
+                        let _window = new PIXI.Graphics();
+                        PIXI_APP.stage.addChild(_window);
+                        _window.id = window_data.id;
+                        _window.visible = window_data.visible;
+
+                        if(window_data.type == "window 1"){
+                            _window.moveTo((window_data.x-1)*values.UNIT, window_data.y*values.UNIT);
+                            _window.lineTo((window_data.x+1)*values.UNIT, window_data.y*values.UNIT);
+                            _window.stroke({color:"#CAE1E5", width:WINDOW_THICKNESS});
+                            _window.lineTo((window_data.x-1)*values.UNIT, window_data.y*values.UNIT);
+                            _window.stroke({color:"#8699A7", width:1});
+
+                        }else if(window_data.type == "window 2"){
+                            _window.moveTo(window_data.x*values.UNIT, (window_data.y-1)*values.UNIT);
+                            _window.lineTo(window_data.x*values.UNIT, (window_data.y+1)*values.UNIT);
+                            _window.stroke({color:"#CAE1E5", width:WINDOW_THICKNESS});
+                            _window.lineTo(window_data.x*values.UNIT, (window_data.y-1)*values.UNIT);
+                            _window.stroke({color:"#8699A7", width:1});
+                        }        
+                    }
+                }
+                draw_windows();
+
+
+
+
+                // DRAW LIGHTS
+                function draw_lights(){      
+                    for(let light_data of DATA.lights){
+                        let light = new PIXI.Graphics();
+                        PIXI_APP.stage.addChild(light);
+
+                        light
+                            .circle(light_data.x*values.UNIT , light_data.y*values.UNIT, 10).fill({alpha:0.4, color:"#f6c500"})
+                            .circle(light_data.x*values.UNIT , light_data.y*values.UNIT, 3)
+                            .circle(light_data.x*values.UNIT , light_data.y*values.UNIT, 5)
+
+                            .moveTo(light_data.x*values.UNIT , light_data.y*values.UNIT)
+                            .lineTo((light_data.x*values.UNIT)-7 , (light_data.y*values.UNIT)+7)
+                            .lineTo((light_data.x*values.UNIT)+7 , (light_data.y*values.UNIT)-7)
+
+                            .moveTo(light_data.x*values.UNIT , light_data.y*values.UNIT)
+                            .lineTo((light_data.x*values.UNIT)-7 , (light_data.y*values.UNIT)-7)
+                            .lineTo((light_data.x*values.UNIT)+7 , (light_data.y*values.UNIT)+7)
+                            .stroke({color:"#000000", pixelLine:true});
+                        light.id = light_data.id;
+                        //light.id = light_data.id;
+                        light.visible = light_data.visible;
+                    }
+                }
+                draw_lights();
+
+
+
+                // DRAW HVAC
+                function draw_hvac(){
+                    for(let hvac_data of DATA.hvacs){
+                        let hvac = new PIXI.Graphics();
+                        PIXI_APP.stage.addChild(hvac);
+
+                        hvac.rect((hvac_data.x-1)*values.UNIT, (hvac_data.y-1)*values.UNIT, 2*values.UNIT, 2*values.UNIT);
+                        hvac.circle(hvac_data.x*values.UNIT , hvac_data.y*values.UNIT, 10);
+                        hvac.moveTo((hvac_data.x-1) * values.UNIT, (hvac_data.y-1)*values.UNIT);
+                        hvac.lineTo((hvac_data.x+1) * values.UNIT, (hvac_data.y+1)*values.UNIT);
+                        hvac.moveTo((hvac_data.x-1) * values.UNIT, (hvac_data.y+1)*values.UNIT);
+                        hvac.lineTo((hvac_data.x+1) * values.UNIT, (hvac_data.y-1)*values.UNIT);
+                        hvac.stroke({color:"#000000", pixelLine:true});
+
+                        hvac.id = hvac_data.id;
+                        hvac.visible = hvac_data.visible;
+
+                    }
+                }
+                draw_hvac();
+
+
+                // DRAW TEXTS
+                function draw_texts(){
+                    for(let i=0; i < DATA.texts.length; i++){
+                        let text_data = DATA.texts[i];
+
+                        let text = new PIXI.Text({
+                            anchor:0.5,
+                            style:{
+                                fill:"#000000",
+                                fontSize:15
+                            },
+                            text:text_data.text
+                        });
+                        TEXTS_CONTAINER.addChild(text);
+                        text.id = text_data.id;
+                        text.text = text_data.text;
+                        text.visible = text_data.visible;
+                        text.x = text_data.x * values.UNIT;
+                        text.y = text_data.y * values.UNIT;
+
+
+
+                        // text object btn
+                        let text_btn = document.createElement("tr");
+                        document.getElementById("text_buttons_holder").getElementsByTagName("tbody")[0].appendChild(text_btn);
+                        text_btn.style.cursor = "pointer";
+
+                        let text_empty_td = document.createElement("td");
+                        text_empty_td.className = "m-0 p-0";
+                        text_btn.appendChild(text_empty_td);
+
+                        let text_btn_td = document.createElement("td");
+                        text_btn.appendChild(text_btn_td);
+                        text_btn_td.className = "m-0 p-0";
+                        text_btn_td.innerHTML = text_data.text;
+
+                        // store block button inside block graphics object
+                        text.object_btn = text_btn_td;
+
+                        
+                        text_btn.onclick = (ev)=>{
+                            show_editor_text(text_data.id);
+                        }
+
+
+                    }
+                }
+                draw_texts();
+
+
+
+            </script>
+        </main>
+    </body>
+</html>

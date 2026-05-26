@@ -1,0 +1,367 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="charset" content="utf-8">
+        <title>ZEDT - 3D View</title>
+        <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+        <link rel="stylesheet" href="{% static 'bootstrap-5.3.3/css/bootstrap.min.css' %}">
+        <script src="{% static 'bootstrap-5.3.3/js/bootstrap.bundle.min.js' %}"></script>
+
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "PIXI": "{% static 'libs/pixi.min.mjs' %}",
+                    "THREE" : "{% static 'libs/three/three.module.min.js' %}",
+                    "OrbitControls": "{% static 'three/OrbitControls.js' %}"
+                }
+            }
+        </script>
+        
+
+
+
+        <!-- put project data inside script tag with id projet_data -->
+        <p class="d-none" id="project_uuid">{{project.uuid}}</p>
+        {{project.data|json_script:"project_data"}}
+        
+        
+
+    </head>
+    <body class="bg-light" style="margin:0px; overflow: hidden; padding: 0px;">
+
+
+
+        <header class="bg-dark rounded shadow" style="position:absolute; left:50%; top:5px; transform:translateX(-50%);  z-index:1000;">
+            <!-- top menu -->
+            <div class="btn-group px-2 py-2">
+                <a class="btn btn-secondary btn-sm" href="{% url 'user:dashboard' %}">Dashboard</a>
+                <a class="btn btn-secondary btn-sm" href="{% url 'user:project_details' project.uuid %}">Details</a>
+                <a class="btn btn-secondary btn-sm" href="{% url 'editor:index' project.uuid %}">Edit</a>
+                <a class="btn btn-secondary btn-sm"  href="{% url 'editor:2d_view' project.uuid %}">2D View</a>
+                <a class="btn btn-secondary btn-sm"  href="{% url 'editor:3d_view' project.uuid %}">3D View</a>
+            </div>
+        </header>
+
+
+
+
+
+
+       
+
+        <!-- load some texures used for the floor -->
+        <img id="ceramic_tiles_texture" src="{% static 'images/floor/tiles.jpg' %}" style="display:none;">
+        <img id="granite_texture" src="{% static 'images/floor/granite.jpg' %}" style="display:none;">
+        <img id="hardwood_texture" src="{% static 'images/floor/wood 2.jpg' %}" style="display:none;">
+        <img id="marble_texture" src="{% static 'images/floor/marble.jpg' %}" style="display:none;">
+        <img id="polished_concrete_texture" src="{% static 'images/floor/concrete.jpg' %}" style="display:none;">
+        <img id="porcelain_tiles_texture" src="{% static 'images/floor/tiles.jpg' %}" style="display:none;">
+        <img id="pvc_tiles_texture" src="{% static 'images/floor/tiles.jpg' %}" style="display:none;">
+
+
+            
+
+        <script type="text/javascript">
+
+            function create_brick_texture(width, height){
+                const canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext("2d");
+
+                const brick_w = 32, brick_h = 16, mortar = 2;
+
+                for(let y = 0; y < canvas.height; y += brick_h + mortar){
+                    for(let x = 0; x < canvas.width; x+= brick_w + mortar){
+                            
+                        ctx.fillStyle = (x/(brick_w+mortar) + y/(brick_h+mortar)) % 2 ? "#000000" : "#787878";
+                        ctx.fillRect(x + mortar/2, y + mortar/2, brick_w, brick_h);
+
+                            
+                        ctx.fillStyle = "#C0C0CC";
+                        if(y === 0) ctx.fillRect(x, y, brick_w + mortar, mortar);
+                        if(x === 0) ctx.fillRect(x, y, mortar, brick_h + mortar);
+                    }
+                }
+                return canvas
+            }
+
+
+
+            function create_brick_texture2(width, height){
+                const brick_w = 32, brick_h = 16, mortar = 2;
+
+                const canvas = document.createElement("canvas");
+                canvas.width = brick_w*width;
+                canvas.height = brick_h*height;
+                const ctx = canvas.getContext("2d");
+
+
+                for(let y = 0; y < canvas.height; y += brick_h + mortar){
+                    for(let x = 0; x < canvas.width; x+= brick_w + mortar){
+                            
+                        ctx.fillStyle = (x/(brick_w+mortar) + y/(brick_h+mortar)) % 2 ? "#000000" : "#787878";
+                        ctx.fillRect(x + mortar/2, y + mortar/2, brick_w, brick_h);
+
+                            
+                        ctx.fillStyle = "#C0C0C0";
+                        if(y === 0) ctx.fillRect(x, y, brick_w + mortar, mortar);
+                        if(x === 0) ctx.fillRect(x, y, mortar, brick_h + mortar);
+                    }
+                }
+                return canvas
+            }
+
+        </script>
+
+
+
+
+
+
+        <script type="module">
+            import * as THREE from "THREE";
+            import { OrbitControls } from "OrbitControls";
+
+
+
+            // LOAD PROJECT DATA
+            let DATA;
+            let project_data = JSON.parse(document.getElementById("project_data").innerHTML);
+            if(project_data != undefined){
+                DATA = project_data;
+            }
+
+
+
+            // HTML DOM ELEMNTS
+            let CANVAS_HOLDER = document.querySelector("#canvas_holder");
+            let WALL_THICKNESS = 0.5;
+            let WALL_HEIGHT = 10;
+            const UNIT = 2;
+
+
+
+
+
+            let scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x555555);
+
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+            camera.position.x = 15;
+            camera.position.y = 15;
+            camera.position.z = 15;
+            camera.lookAt(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+            renderer.shadowMap.enabled = true
+
+
+
+
+
+
+
+            let project_group = new THREE.Group();
+            scene.add(project_group);
+
+
+
+    
+            /*const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.castShadow = true
+            light.position.set(5, 10, 5);
+            scene.add(light);*/
+
+
+
+
+            const center_geometry = new THREE.BoxGeometry(1, 1, 1);
+            const center_material = new THREE.MeshBasicMaterial({color:new THREE.Color(0xff0000)});
+            const center_mesh = new THREE.Mesh(center_geometry, center_material);
+            scene.add(center_mesh);
+
+            const grid = new THREE.GridHelper(1000 * UNIT, window.innerWidth/UNIT);
+            scene.add(grid);
+
+                
+
+
+
+            // BLOCKS
+            for(let block_data of DATA.blocks.objects){
+                
+                // west, left wall
+                if(block_data.west_wall_available){
+                    const geometry = new THREE.BoxGeometry(
+                        WALL_THICKNESS,
+                        WALL_HEIGHT,
+                        (block_data['bottom_left']['y'] - block_data['top_left']['y'])
+                    );
+                    geometry.translate(0, WALL_HEIGHT/2, ((block_data['bottom_left']['y'] - block_data['top_left']['y'])/2),);
+
+                    // const texture = new THREE.CanvasTexture(create_brick_texture2(block_data['top_right']['x'] - block_data['top_left']['x'], block_data['bottom_right']['y'] - block_data['top_right']['y'] ));
+                    // texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+                    const material = new THREE.MeshStandardMaterial();
+
+                    const mesh = new THREE.Mesh(geometry, material);
+                    project_group.add(mesh);
+                    mesh.receiveShadow = true;
+                    mesh.position.x = block_data['top_left']['x'];
+                    mesh.position.z = block_data['top_left']['y'];
+                }
+
+
+
+                // east, right wall
+                if(block_data.east_wall_available){
+                    const geometry = new THREE.BoxGeometry(
+                        WALL_THICKNESS,
+                        WALL_HEIGHT,
+                        (block_data['bottom_right']['y'] - block_data['top_right']['y'])
+                    );
+                    geometry.translate(0, WALL_HEIGHT/2, ((block_data['bottom_right']['y'] - block_data['top_right']['y'])/2),);
+
+                    const material = new THREE.MeshStandardMaterial();
+
+                    const mesh = new THREE.Mesh(geometry, material);
+                    project_group.add(mesh);
+                    mesh.receiveShadow = true;
+                    mesh.position.x = block_data['top_right']['x'];
+                    mesh.position.z = block_data['top_right']['y'];
+                }
+
+
+
+                // north, top wall
+                if(block_data.north_wall_available){
+                    const geometry = new THREE.BoxGeometry(
+                        (block_data['top_right']['x'] - block_data['top_left']['x']),
+                        WALL_HEIGHT,
+                        WALL_THICKNESS
+                    );
+                    geometry.translate((block_data['top_right']['x'] - block_data['top_left']['x'])/2,  WALL_HEIGHT/2, 0);
+
+                    const material = new THREE.MeshStandardMaterial();
+
+                    const mesh = new THREE.Mesh(geometry, material);
+                    project_group.add(mesh);
+                    mesh.receiveShadow = true;
+                    mesh.position.x = block_data['top_left']['x'];
+                    mesh.position.z = block_data['top_left']['y'];
+                }
+
+
+
+                // south, bottom wall
+                if(block_data.south_wall_available){
+                    const geometry = new THREE.BoxGeometry(
+                        (block_data['bottom_right']['x'] - block_data['bottom_left']['x']),
+                        WALL_HEIGHT,
+                        WALL_THICKNESS
+                    );
+                    geometry.translate((block_data['bottom_right']['x'] - block_data['bottom_left']['x'])/2, WALL_HEIGHT/2, 0);
+
+                    const material = new THREE.MeshStandardMaterial();
+
+                    const mesh = new THREE.Mesh(geometry, material);
+                    project_group.add(mesh);
+                    mesh.receiveShadow = true;
+                
+                    mesh.position.x = block_data['bottom_left']['x'];
+                    mesh.position.z = block_data['bottom_left']['y'];
+                }
+
+
+
+
+                // floor
+                let floor_geometry = new THREE.PlaneGeometry(block_data['top_right']['x'] - block_data['top_left']['x'] , block_data['bottom_left']['y'] - block_data['top_left']['y']);
+                floor_geometry.translate((block_data['top_right']['x'] - block_data['top_left']['x'])/2, (block_data['bottom_left']['y'] - block_data['top_left']['y'])/2, 0 );
+
+                let floor_material = new THREE.MeshStandardMaterial({side:THREE.DoubleSide});
+                let floor_mesh = new THREE.Mesh(floor_geometry, floor_material);
+                project_group.add(floor_mesh);
+                floor_mesh.receiveShadow = true;
+                floor_mesh.position.x = block_data['top_left']['x'];
+                floor_mesh.position.z = block_data['top_left']['y'];
+                floor_mesh.rotation.x = Math.PI/2;
+            }
+
+
+
+
+
+            // DOORS
+
+
+
+
+
+
+
+            // WINDOWS
+
+
+
+
+
+
+
+            // LIGHTS
+            let max_watts = null;
+            let min_watts = null;
+            for(let light_data of DATA.lights){
+            }
+
+            for(let light_data of DATA.lights){
+                let light = new THREE.PointLight(0xffffff, 10, 100);
+                light.position.set( light_data['x'], 1, light_data['y'] );
+                scene.add( light );
+
+                const sphereSize = 1;
+                const pointLightHelper = new THREE.PointLightHelper( light, sphereSize );
+                scene.add( pointLightHelper );
+                // console.log(light_data);
+                // console.log(light);
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+
+            const controls = new OrbitControls( camera, renderer.domElement );
+            function animate() {
+                renderer.render( scene, camera );
+            }
+            renderer.setAnimationLoop( animate );
+
+
+
+
+        </script>
+        
+    </body>
+</html>

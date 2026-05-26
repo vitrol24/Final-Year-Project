@@ -1,0 +1,47 @@
+{% load static %}
+<div class="container-fluid py-2" id="window_editor" style="display:none;">
+
+
+    <!-- type -->
+    <div class="mb-2">
+        <label for="type" class="form-label text-light" style="user-select:none;">Type</label>
+        <input class="form-control" id="type" type="text" value="Window" readonly>
+    </div>
+
+    
+    <!-- name -->
+    <div class="mb-2">
+        <label for="name" class="form-label text-light" style="user-select:none;">Name</label>
+        <input class="form-control" id="name" type="text">
+    </div>
+
+    
+    <!-- visible -->
+    <div class="mb-4 form-check">
+        <input type="checkbox" class="form-check-input" id="visible">
+        <label class="form-check-label text-light" for="visible" style="user-select:none;">Visible</label>
+    </div>
+
+
+
+    <!-- window materials -->
+    <hr class="text-light"/>
+    <p class="mb-0 mt-4 text-center text-light" style="user-select:none;">Material</p>
+    <div class="mb-2">
+        <label for="layer_1" class="form-label text-light" style="user-select:none;">Layer 1</label>
+        <select class="form-select" id="layer_1">
+            <option value=""></option>
+
+            <option value="Single Clear 4mm Glass">Single Clear 4mm Glass</option>
+            <option value="Single Tinted/Bronze 4mm">Single Tinted/Bronze 4mm</option>
+            <option value="Double Glazing Clear 4-6-4mm air">Double Glazing Clear 4-6-4mm air</option>
+            <option value="Double Glazing Low-e 4-6-4mm air">Double Glazing Low-e 4-6-4mm air</option>
+        </select>
+    </div>
+
+    
+    <!-- delete button -->
+    <button class="btn btn-sm btn-danger" id="delete_window_btn">Delete Window</button>
+
+
+</div>
