@@ -1,0 +1,251 @@
+{% extends "user/dashboard_base.html" %}
+{% load static %}
+
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="my-4">
+            <p class="fw-bolder h1">{{project.name}}</p>
+            <p class="text-secondary">📍 {{project.location}}, Zamiba</p>
+            <p class="">{{project.info}}</p>
+        </div>
+        
+        
+        <hr/>
+
+        <div class="my-4">
+            <a class="btn btn-primary" href="{% url 'editor:run_simulation' project.uuid %}">▶ Run Simulation</a>
+            <!--a class="btn btn-primary" href="{% url 'editor:3d_view' project.uuid %}">📦 3D View</a-->
+            <a class="btn btn-primary" href="{% url 'editor:index' project.uuid %}">📝 Open in Editor</a>
+            <!--
+            {% if project.published %}
+                <a class="btn btn-warning" href="{% url 'user:unpublish_project' project.uuid %}">🔒 Unpublish</a>
+            {% else %}
+                <a class="btn btn-success" href="{% url 'user:publish_project' project.uuid %}">🌐 Publish</a>
+            {% endif %}
+            -->
+            <a class="btn btn-danger" href="{% url 'user:delete_project' project.uuid %}">🗑 Delete Project</a>
+        </div>
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+        <!-- put project data inside script tag with id projet_data -->
+        <p class="d-none" id="project_uuid">{{project.uuid}}</p>
+        {{project.simulation_results|json_script:"project_simulation_results"}}
+
+
+
+        <p class="h3" id="summary_text" ><u>Projected Energy Use</u></p>
+        {% if not project.simulation_results %}
+            <p>No data</p>
+        {% else %}
+
+            
+            <div class="mb-4 row">
+                <div class="col-4">
+                    <canvas class="border border-dark" id="cooling_chart" style="height:300px; width:100%;"></canvas>
+                </div>
+                <div class="col-4">
+                    <canvas class="border border-dark" id="heating_chart" style="height:300px; width:100%;"></canvas>
+                </div>
+                <div class="col-4">
+                    <canvas class="border border-dark" id="lighting_chart" style="height:300px; width:100%"></canvas>
+                </div>
+            </div>
+            
+
+            <!-- SAMPLE ENERGY USE CHART -->
+            <script>
+                let simulation_results = document.getElementById("project_simulation_results").innerHTML;
+                
+
+                if(simulation_results != null){
+                    simulation_results = JSON.parse(simulation_results);
+
+                    new Chart("cooling_chart", {
+                        type: "line",
+                        data:{
+                            labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                            datasets: [
+                                {
+                                    label: "Cooling",
+                                    data: simulation_results['monthly_cooling']
+                                }
+                            ]
+                        }
+                    });
+
+
+                    new Chart("heating_chart", {
+                        type: "line",
+                        data:{
+                            labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                            datasets: [
+                                {
+                                    label: "Heating",
+                                    data: simulation_results['monthly_heating']
+                                }
+                            ]
+                        }
+                    });
+
+
+                    new Chart("lighting_chart", {
+                        type: "line",
+                        data:{
+                            labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                            datasets: [
+                                {
+                                    label: "Lighting",
+                                    data: simulation_results['monthly_lighting']
+                                }
+                            ]
+                        }
+                    });
+
+
+                }
+
+                
+            </script>
+
+        {% endif %}
+
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="mb-4 row py-2">
+            <div class="row"> 
+                <div class="col">
+                    {% if project.simulation_results  and  project.simulation_results.total_cooling %}
+                        <p class="fw-bold">Total Cooling Usage: <span class="text-primary">{{project.simulation_results.total_cooling}} KwH</span></p>
+                        <p class="fw-bold">Energy Use Intensity (EUI): <span class="text-primary">{{project.simulation_results.cooling_EUI}} KwH/m<sup>2</sup></span></p>
+                        <p><span class="fw-bold">Conclusion:</span>
+                            {% if project.simulation_results.cooling_EUI < 5 %}
+                                <span>Not enough cooling, add more HVACs or add more insulation to the walls materials.</span>
+                            {% elif project.simulation_results.cooling_EUI < 15 %}
+                                <span>Your building is very efficient at cooling. </span>
+                            {% elif project.simulation_results.cooling_EUI < 40 %}
+                                <span>Typical cooling for offices in warm climate.</span>
+                            {% elif project.simulation_results.cooling_EUI < 80 %}
+                                <span>High energy usage for cooling.  Possibly too many hvacs or poor insulation.</span>
+                            {% elif project.simulation_results.cooling_EUI > 80 %}
+                                <span>Very high energy for cooling.  Possibly too many hvacs or poor insulation.</span>
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    {% if project.simulation_results  and  project.simulation_results.total_heating %}
+                        <p class="fw-bold">Total Heating Usage: <span class="text-primary">{{project.simulation_results.total_heating}} KwH</span></p>
+                        <p class="fw-bold">Energy Use Intensity (EUI): <span class="text-primary">{{project.simulation_results.heating_EUI}} KwH/m<sup>2</sup></span></p>
+                        <p><span class="fw-bold">Conclusion:</span>
+                            {% if project.simulation_results.heaing_EUI < 5 %}
+                                <span>Not enough heating, add more HVACs or add more insulation to the walls materials.</span>
+                            {% elif project.simulation_results.heating_EUI < 15 %}
+                                <span>Your building is very efficient at heating.</span>
+                            {% elif project.simulation_results.heating_EUI < 50 %}
+                                <span>Typical heating for temperate climates.</span>
+                            {% elif project.simulation_results.heating_EUI < 100 %}
+                                <span>High heating energy usage.Typical heating for cold climates.</span>
+                            {% elif project.simulation_results.heating_EUI > 100 %}
+                                <span>Very high energy usage for heating. Likely cause is poor insulation.</span>
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    {% if project.simulation_results  and  project.simulation_results.total_lighting %}
+                        <div>
+                            <p class="fw-bold">Total Lighting Usage: <span class="text-primary">{{project.simulation_results.total_lighting}} KwH</span></p>
+                            <p class="fw-bold">Energy Use Intensity (EUI): <span class="text-primary">{{project.simulation_results.lighting_EUI}} KwH/m<sup>2</sup></span></p>
+                            <p><span class="fw-bold">Conclusion:</span> 
+                            {% if project.simulation_results.lighting_EUI < 2 %}
+                                    <span class="">Your building isn't using enough lighting. Try adding more lights or increase the wattage of the existsing lights.</span>
+                                {% elif project.simulation_results.lighting_EUI < 8 %}
+                                    <span>Good energy use for a storage room. If this isn't your building type, then add more lights or increase the watts of the existsing lights.</span>
+                                {% elif project.simulation_results.lighting_EUI < 35 %}
+                                    <span>Good energy use for a modern office or school. If this isn't your building type, then add more lights or increase the watts of the existsing lights.</span>
+                                {% elif project.simulation_results.lighting_EUI < 70 %}
+                                    <span>Good energy use for a Hospital, Museum, Gallery, Retail and Supermakets. If this isn't your building type, then add more lights or increase the watts of the existsing lights.</span>
+                                {% elif project.simulation_results.lighting_EUI < 90 %}
+                                    <span>Normal energy use for buildings with long operating hours and high power density. If this isn't your building type, then add more lights or increase the watts of the existsing lights.</span>
+                                {% elif project.simulation_results.lighting_EUI > 90 %}
+                                    <span>High energy use. Check for too many bulbs and too high wattage of the lights.</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            
+            
+            
+
+        </div>
+
+
+
+        <div>
+            <h1 class="text-center">Overall Overview</h1>
+                {% if project.simulation_results  and  project.simulation_results.total_EUI %}
+                    <p><span class="fw-bold">Total Building Area: </span>{{project.simulation_results.area}} m<sup>2</sup></p>
+                    <p><span class="fw-bold">Total Energy Usage: </span>{{project.simulation_results.total_energy}}</p>
+                    <p><span class="fw-bold">Total Energy Use Intensity (EUI): </span>{{project.simulation_results.total_EUI}}</p>
+                    {% if project.simulation_results.total_EUI < 30 %}
+                        <p><span class="fw-bold">Conclusion:</span> Overall efficient energy use for warm climates.</p>
+                    {% elif project.simulation_results.total_EUI < 50 %}
+                        <p><span class="fw-bold">Conclusion:</span> Efficient energy use for warehouses in warm climates. If this is your building type, then try changing the number of lights, HVACs and using better materials.</p>
+                    {% elif project.simulation_results.total_EUI < 100 %}
+                        <p><span class="fw-bold">Conclusion:</span> Efficient energy use for offices and schools in warm climates. If this is your building type, then try changing the number of lights, HVACs and using better materials.</p>
+                    {% elif project.simulation_results.total_EUI < 250 %}
+                        <p><span class="fw-bold">Conclusion:</span> Efficient energy use for hospitals in warm climates. If this is your building type, then try changing the number of lights, HVACs and using better materials.</p>
+                    {% else %}
+                        <p><span class="fw-bold">Conclusion:</span> High energy use for warm climates, try changing the number of lights, HVACs and using better materials.</p>
+                    {% endif %}
+                {% else %}
+                    <p>No Data.</p>
+                {% endif %}
+
+        </div>
+
+
+    </div>
+
+
+{% endblock %}

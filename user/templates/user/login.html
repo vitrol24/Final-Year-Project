@@ -1,0 +1,24 @@
+{% extends "index/base.html" %}
+
+{% block title %}ZEDT - Login{%endblock title %}
+
+{% block content %}
+    <div class="bg-light border container-fluid my-4 text-center" style="max-height:400px; max-width:500px;">
+        <h1 class="fw-bolder">LOGIN</h1>
+        <form method="post" action="{% url 'user:login' %}">
+            {% csrf_token %}
+            <div class="container-fluid my-2 text-start">
+                <label for="email" class="form-label">Email</label>
+                <input class="form-control" id="email" name="email" type="email" required>
+            </div>
+            <div class="container-fluid my-2 text-start">
+                <label for="password" class="form-label">Password</label>
+                <input class="form-control" id="password" name="password" type="password" required>
+            </div>
+                    
+            <input class="btn btn-primary my-2" type="submit" value="LOGIN">
+        </form>
+        <hr />
+        <p>Don't have an account? <a href="{% url 'user:signup' %}">Signup</a></p>
+    </div>
+{% endblock content %}

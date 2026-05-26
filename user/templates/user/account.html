@@ -1,0 +1,35 @@
+{% extends "user/dashboard_base.html" %}
+{% load static %}
+
+
+{% block content %}
+    <h1 class="text-center"><u>ACCOUNT DETAILS</u></h1>
+
+    <form method="post" action="{% url 'user:update_information' %}">
+        {% csrf_token %}
+        <div class="container-fluid my-2 text-start">
+            <label for="firstname" class="form-label">Firstname</label>
+            <input class="form-control" id="firstname" name="firstname" type="text" value="{{user.first_name}}" required>
+        </div>
+        <div class="container-fluid my-2 text-start">
+            <label for="lastname" class="form-label">Lastname</label>
+            <input class="form-control" id="lastname" name="lastname" type="text" value="{{user.last_name}}" required>
+        </div>
+        <div class="container-fluid my-2 text-start">
+            <label for="email" class="form-label">Email</label>
+            <input class="form-control" id="email" name="email" type="email" value="{{user.email}}" required>
+        </div>
+        <!--div class="container-fluid my-2 text-start">
+            <label for="password" class="form-label">Password</label>
+            <input class="form-control" id="password" name="password" type="password" required>
+        </div-->
+        <div class="container-fluid text-center">
+            <input class="btn btn-primary my-2" type="submit" value="UPDATE INFORMATION">
+        </div>
+        
+    </form>
+    <div class="container-fluid text-center">
+        <a class="btn btn-danger my-2" href="{% url 'user:delete_account' %}">DELETE ACCOUNT</a>
+    </div>
+    
+{% endblock %}

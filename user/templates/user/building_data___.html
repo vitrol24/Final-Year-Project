@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZGDT: Lusaka Office Energy Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #28a745; /* Green for "Green Design" */
+            --secondary-color: #007bff; /* Blue for contrast */
+            --text-color: #333;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #e9ecef;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --savings-color: #28a745;
+            --alert-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-light);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--bg-white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px var(--shadow-light);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            grid-column: 1 / -1; /* Span full width */
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 2px 8px var(--shadow-light);
+        }
+
+        .card h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .metric-comparison table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .metric-comparison th,
+        .metric-comparison td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .metric-comparison th {
+            background-color: var(--bg-light);
+            font-weight: 700;
+        }
+
+        .metric-comparison .savings {
+            font-weight: 700;
+            color: var(--savings-color);
+        }
+        .metric-comparison .savings.negative {
+            color: var(--danger-color); /* If something gets worse */
+        }
+        
+        .metric-comparison .positive-change {
+            color: var(--savings-color);
+            font-weight: bold;
+        }
+        .metric-comparison .negative-change {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+
+
+        .chart-container {
+            width: 100%;
+            height: 300px; /* Fixed height for consistency */
+            margin-top: 20px;
+        }
+
+        .recommendations ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .recommendations li {
+            background-color: #e6f7ea; /* Light green background */
+            border-left: 5px solid var(--primary-color);
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        .recommendations .impact {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .alert-message {
+            background-color: #fff3cd; /* Light orange */
+            border-left: 5px solid var(--alert-color);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            color: #664d03;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>ZGDT: Lusaka Office Energy Performance Dashboard</h1>
+
+        <div class="card kpi-summary">
+            <h2>Project Summary</h2>
+            <p><strong>Building Type:</strong> Single-story Commercial Office</p>
+            <p><strong>Location:</strong> Lusaka, Zambia (EPW: Lusaka_Intl_AP.epw)</p>
+            <p><strong>Floor Area:</strong> 500 m<sup>2</sup></p>
+            <p><strong>Simulation Date:</strong> 2023-10-27</p>
+            <p><strong>Current Design EUI:</strong> <span style="font-size: 1.2em; font-weight: bold; color: var(--primary-color);">115 kWh/m²/year</span></p>
+        </div>
+
+        <div class="card metric-comparison">
+            <h2>Performance Comparison: Baseline vs. Proposed Design</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Baseline Case</th>
+                        <th>Proposed Design</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Annual EUI (kWh/m²/yr)</td>
+                        <td>185</td>
+                        <td>115</td>
+                        <td class="savings">-70 kWh/m²/yr (38% Reduction)</td>
+                    </tr>
+                    <tr>
+                        <td>Peak Cooling Demand (kW)</td>
+                        <td>55</td>
+                        <td>32</td>
+                        <td class="savings">-23 kW (42% Reduction)</td>
+                    </tr>
+                    <tr>
+                        <td>Comfort Hours (Hours/Year)</td>
+                        <td>4,200</td>
+                        <td>7,100</td>
+                        <td class="positive-change">+2,900 Hours (69% Improvement)</td>
+                    </tr>
+                     <tr>
+                        <td>Operational Carbon (kgCO2/yr)</td>
+                        <td>7,400</td>
+                        <td>4,600</td>
+                        <td class="savings">-2,800 kgCO2/yr (38% Reduction)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="alert-message">
+                **Note:** Baseline assumes standard uninsulated brick/metal sheet roof, no shading, and basic ventilation, typical for existing Lusaka construction.
+            </p>
+        </div>
+
+        <div class="card energy-breakdown">
+            <h2>Proposed Design: Annual Energy End-Use</h2>
+            <div class="chart-container">
+                <canvas id="energyUseChart"></canvas>
+            </div>
+            <p style="text-align: center; font-style: italic; margin-top: 10px;">Total Annual Consumption: 57,500 kWh</p>
+        </div>
+
+        <div class="card recommendations">
+            <h2>Key Design Recommendations & Impact</h2>
+            <ul>
+                <li>
+                    <span class="impact">Optimized External Shading:</span> Crucial for Lusaka's high solar gains, reducing cooling loads by up to 25%.
+                </li>
+                <li>
+                    <span class="impact">Insulated Roof:</span> High impact due to direct solar exposure. Recommended R-value of 2.5 m²K/W for roof insulation.
+                </li>
+                <li>
+                    <span class="impact">High Thermal Mass Walls:</span> Utilize local materials like heavy masonry for diurnal temperature moderation.
+                </li>
+                <li>
+                    <span class="impact">Natural Ventilation Design:</span> Incorporate operable windows and cross-ventilation strategies for comfort during mild periods.
+                </li>
+                <li>
+                    <span class="impact">Efficient Lighting & Daylighting:</span> Maximise natural light to reduce artificial lighting load (35% of total energy).
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        // Data for the Energy End-Use Breakdown Chart
+        const energyData = {
+            labels: ['Lighting', 'Equipment/Plug Loads', 'Cooling (A/C)', 'Fans/Ventilation', 'Water Heating'],
+            datasets: [{
+                data: [35, 30, 20, 10, 5], // Percentages
+                backgroundColor: [
+                    '#FFD700', // Gold for Lighting
+                    '#9B59B6', // Purple for Equipment
+                    '#3498DB', // Blue for Cooling
+                    '#2ECC71', // Green for Fans
+                    '#E74C3C'  // Red for Water Heating
+                ],
+                hoverOffset: 4
+            }]
+        };
+
+        // Configuration for the Chart
+        const config = {
+            type: 'pie',
+            data: energyData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed + '%';
+                                }
+                                return label;
+                            }
+                        }
+                    },
+                    title: {
+                        display: false,
+                        text: 'Proposed Design: Annual Energy End-Use'
+                    }
+                }
+            }
+        };
+
+        // Render the Chart
+        window.onload = function() {
+            const ctx = document.getElementById('energyUseChart').getContext('2d');
+            new Chart(ctx, config);
+        };
+    </script>
+</body>
+</html>
